@@ -1,8 +1,11 @@
 package pl.edu.wat.portal_gloszeniowy.dtos;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class TagRequestDto {
     private String name;
 }

@@ -6,7 +6,9 @@ import java.util.List;
 
 @Data
 public class OfferRequestDto {
-    protected String title;
-    protected float price;
+    private String title;
+    private float price;
+    private String detais;
+    private String photos;
     List<TagRequestDto> tags;
 }

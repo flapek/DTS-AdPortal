@@ -3,19 +3,18 @@ package pl.edu.wat.portal_gloszeniowy.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Data
-public class Tag {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-    private String name;
+    private String content;
+    private String user;
 
+    @ManyToOne
+    private Offer ofeer;
 
-
-    @ManyToMany
-    List<Offer> offerList;
 }

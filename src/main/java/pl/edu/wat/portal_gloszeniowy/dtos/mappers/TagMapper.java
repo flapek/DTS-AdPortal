@@ -1,7 +1,11 @@
 package pl.edu.wat.portal_gloszeniowy.dtos.mappers;
 
+import lombok.AllArgsConstructor;
+import pl.edu.wat.portal_gloszeniowy.dtos.TagRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.TagResponseDto;
 import pl.edu.wat.portal_gloszeniowy.entities.Tag;
+import pl.edu.wat.portal_gloszeniowy.repositories.TagRepository;
+import pl.edu.wat.portal_gloszeniowy.services.TagService;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,4 +26,5 @@ public class TagMapper {
         }
         return tagResponseDtoList;
     }
+
 }

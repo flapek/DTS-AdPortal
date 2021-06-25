@@ -3,19 +3,27 @@ package pl.edu.wat.portal_gloszeniowy.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.awt.*;
 import java.util.List;
 
-//@MappedSuperclass
 @Entity
 @Data
 public class Offer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    protected Long id;
-    protected String title;
-    protected float price;
+    private Long id;
+    private String title;
+    private float price;
+    private String detais;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private String photos;
+
+    @OneToMany
+    private List<Comment> comments;
+
 
     @ManyToMany
-    protected List<Tag> tagList;
+    private List<Tag> tagList;
 }
