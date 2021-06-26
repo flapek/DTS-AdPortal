@@ -3,6 +3,7 @@ package pl.edu.wat.portal_gloszeniowy.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.wat.portal_gloszeniowy.dtos.CommentRequestDto;
@@ -25,8 +26,10 @@ public class CommentController {
     }
 
     @PostMapping(path = "/offer/addComment")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity addCommentToOffer(@RequestBody CommentRequestDto commentRequestDto)
     {
+        System.out.println(commentRequestDto.getContent());
         commentService.addComment(commentRequestDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
