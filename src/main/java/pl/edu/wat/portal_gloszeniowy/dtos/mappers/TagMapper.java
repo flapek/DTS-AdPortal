@@ -27,4 +27,14 @@ public class TagMapper {
         return tagResponseDtoList;
     }
 
+    public List<String> toStringTagList(List<TagResponseDto> tagResponseDtoList)
+    {
+        List<String> stringList = new LinkedList<>();
+        for (TagResponseDto tagresponse:
+              tagResponseDtoList) {
+            stringList.add(tagresponse.getName());
+        }
+        return stringList;
+    }
+
 }

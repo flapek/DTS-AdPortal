@@ -1,22 +1,24 @@
 package pl.edu.wat.portal_gloszeniowy.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.util.Optionals;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import pl.edu.wat.portal_gloszeniowy.dtos.OfferRequestDto;
-import pl.edu.wat.portal_gloszeniowy.dtos.OfferResponseDto;
-import pl.edu.wat.portal_gloszeniowy.dtos.TagRequestDto;
+import pl.edu.wat.portal_gloszeniowy.dtos.*;
 import pl.edu.wat.portal_gloszeniowy.dtos.mappers.TagMapper;
+import pl.edu.wat.portal_gloszeniowy.entities.Comment;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 import pl.edu.wat.portal_gloszeniowy.entities.Tag;
+import pl.edu.wat.portal_gloszeniowy.repositories.CommentRepository;
 import pl.edu.wat.portal_gloszeniowy.repositories.OfferRepository;
+import pl.edu.wat.portal_gloszeniowy.repositories.TagRepository;
+import pl.edu.wat.portal_gloszeniowy.repositories.UserRepository;
+import pl.edu.wat.portal_gloszeniowy.security.services.UserDetailsServiceImpl;
 
 import java.io.IOException;
-import java.util.Base64;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -26,15 +28,41 @@ public class OfferServiceImpl implements OfferService{
 
     private final OfferRepository offerRepository;
     private final TagService tagService;
+    private final UserRepository userRepository;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final CommentRepository commentRepository;
+
+
 
     @Override
     public List<OfferResponseDto> getAllOffers() {
         TagMapper tagMapper = new TagMapper();
         return StreamSupport.stream(offerRepository.findAll().spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(),
+                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto) {
+        TagMapper tagMapper = new TagMapper();
+        List<OfferResponseDto> responseDtos = StreamSupport.stream(offerRepository.findAll().spliterator(), false)
+                .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
+                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        tagMapper.toTagResponseDtoList(offer.getTagList())))
+                .collect(Collectors.toList());
+        List<OfferResponseDto> matchOffers =responseDtos;
+        for (OfferResponseDto offerResponse:
+             responseDtos) {
+            for (String stringTag:
+                 filterOptionsRequestDto.getTags()) {
+                matchOffers.removeIf(t -> !tagMapper.toStringTagList(t.getTags()).contains(stringTag));
+            }
+        }
+
+        System.out.println(matchOffers);
+        return matchOffers;
     }
 
     @Override
@@ -54,6 +82,7 @@ public class OfferServiceImpl implements OfferService{
                     offer.getPrice(),
                     offer.getDetais(),
                     offer.getPhotos(),
+                    offer.getUser().getUsername(),
                     tagMapper.toTagResponseDtoList(offer.getTagList()));
         }
         else throw new IllegalArgumentException("Bad id");
@@ -71,7 +100,7 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
-    public void addOffer(MultipartFile file, String title, float price, String details, List<String> tags) {
+    public void addOffer(MultipartFile file, String title, float price, String details, List<String> tags, String userName) {
         Offer offer = new Offer();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         TagMapper tagMapper = new TagMapper();
@@ -89,7 +118,10 @@ public class OfferServiceImpl implements OfferService{
         offer.setDetais(details);
         offer.setTagList(new LinkedList<Tag>());
         offer.setTagList(tagService.addTags(tags, offer));
+        offer.setUser(userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName)));
         offerRepository.save(offer);
+        userDetailsService.addOfferToUser(userName, offer);
+
     }
 
     @Override
@@ -110,14 +142,27 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
-    public void updateOffer(OfferRequestDto offerRequestDto, Long offerId) {
+    public void updateOffer(MultipartFile file, String title, float price, String details, List<String> tags, Long offerId) {
         Optional<Offer> offerDB = offerRepository.findById(offerId);
         if(offerDB.isPresent())
         {
             Offer offer = offerDB.get();
-            offer.setTitle(offerRequestDto.getTitle());
-            offer.setPrice(offerRequestDto.getPrice());
-            offer.setDetais(offerRequestDto.getDetais());
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            TagMapper tagMapper = new TagMapper();
+            if(fileName.contains(".."))
+            {
+                System.out.println("not a a valid file");
+            }
+            try {
+                offer.setPhotos(Base64.getEncoder().encodeToString(file.getBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            offer.setTitle(title);
+            offer.setPrice(price);
+            offer.setDetais(details);
+            offer.setTagList(new LinkedList<Tag>());
+            offer.setTagList(tagService.addTags(tags, offer));
             offerRepository.save(offer);
         }
         else throw new IllegalArgumentException("Bad id");
@@ -128,7 +173,12 @@ public class OfferServiceImpl implements OfferService{
         Optional<Offer> offerDB = offerRepository.findById(offerId);
         if(offerDB.isPresent())
         {
-            offerRepository.delete(offerDB.get());
+            Offer offer = offerDB.get();
+            for (Comment comment:
+                    offer.getComments()) {
+                commentRepository.delete(comment);
+            }
+            offerRepository.delete(offer);
         }
         else throw new IllegalArgumentException("Bad id");
     }

@@ -12,7 +12,7 @@ public interface TagService {
     Tag addTag(String tagRequestDto, Offer offer);
     List<Tag> addTags(List<String> tagRequestDtoList, Offer offer);
 
-    List<TagResponseDto> getAllTags();
+    List<String> getAllTags();
     List<TagResponseDto> getOfferTags(Long offerId);
     TagResponseDto getTag(Long tagId);
 

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 import pl.edu.wat.portal_gloszeniowy.models.ERole;
 import pl.edu.wat.portal_gloszeniowy.models.Role;
 import pl.edu.wat.portal_gloszeniowy.models.User;
@@ -22,6 +23,7 @@ import pl.edu.wat.portal_gloszeniowy.security.jwt.JwtUtils;
 import pl.edu.wat.portal_gloszeniowy.security.services.UserDetailsImpl;
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -119,6 +121,8 @@ public class AuthController
         }
 
         user.setRoles(roles);
+        List<Offer> offers = new LinkedList<>();
+        user.setOffers(offers);
         userRepository.save(user);
 
 //       ResponseEntity.ok(new MessageResponse("User registered successfully!"));

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.wat.portal_gloszeniowy.dtos.CommentRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.CommentResponseDto;
+import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 
 import java.util.List;
 

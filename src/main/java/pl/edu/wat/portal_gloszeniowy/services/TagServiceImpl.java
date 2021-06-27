@@ -2,6 +2,7 @@ package pl.edu.wat.portal_gloszeniowy.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.edu.wat.portal_gloszeniowy.dtos.OfferResponseDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.TagRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.TagResponseDto;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
@@ -11,6 +12,8 @@ import pl.edu.wat.portal_gloszeniowy.repositories.TagRepository;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 @AllArgsConstructor
@@ -45,8 +48,10 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public List<TagResponseDto> getAllTags() {
-        return null;
+    public List<String> getAllTags() {
+        return StreamSupport.stream(tagRepository.findAll().spliterator(), false)
+                .map(Tag::getName)
+                .collect(Collectors.toList());
     }
 
     @Override
