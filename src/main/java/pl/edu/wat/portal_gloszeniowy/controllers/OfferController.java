@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://portal-ogloszeniowy-f.herokuapp.com/")
 public class OfferController {
 
     private final OfferService offerService;
