@@ -12,6 +12,6 @@ public interface CommentService {
 
     List<CommentResponseDto> getOfferComments(Long offerId);
 
-    void addComment(CommentRequestDto commentRequestDto);
+    void addComment(CommentRequestDto commentRequestDto, String userName);
     void deleteComment(Long commentId);
 }
