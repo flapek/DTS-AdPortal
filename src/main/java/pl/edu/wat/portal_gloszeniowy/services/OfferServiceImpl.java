@@ -192,6 +192,11 @@ public class OfferServiceImpl implements OfferService{
                     offer.getComments()) {
                 commentRepository.delete(comment);
             }
+
+            for (Tag tag:
+                 offer.getTagList()) {
+                tagService.deleteTag(tag);
+            }
             List<Offer> oofers = user.getOffers();
             oofers.remove(offer);
             user.setOffers(oofers);
