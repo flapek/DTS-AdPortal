@@ -12,7 +12,8 @@ import java.util.List;
 public interface OfferService {
 
     List<OfferResponseDto> getAllOffers();
-    List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto);
+    List<OfferResponseDto> getUserOffers(String userName);
+    List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName);
     List<OfferResponseDto> getTagOffers(TagRequestDto tagRequestDto);
     OfferResponseDto getOfferDto(Long offerId);
     Offer getOffer(Long offerId);
@@ -21,7 +22,7 @@ public interface OfferService {
 
     void updateOffer(MultipartFile file, String title, float price, String details, List<String> tags, Long offerId);
 
-    void deleteOffer(Long offerId);
+    void deleteOffer(Long offerId, String userName);
 
     void addImage(MultipartFile multipartFile);
 

@@ -72,4 +72,22 @@ public class TagServiceImpl implements TagService{
         offers.add(offer);
         return offers;
     }
+
+    @Override
+    public void deleteTag(Tag tag) {
+        if(tag.getOfferList().size()==1)
+            tagRepository.delete(tag);
+    }
+
+    @Override
+    public void addOfferToTag(Offer offer, List<Tag> tags) {
+        List<Offer> offers;
+        for (Tag tag:
+             tags) {
+            offers=tag.getOfferList();
+            offers.add(offer);
+            tag.setOfferList(offers);
+            tagRepository.save(tag);
+        }
+    }
 }

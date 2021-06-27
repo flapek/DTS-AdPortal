@@ -11,6 +11,7 @@ import pl.edu.wat.portal_gloszeniowy.dtos.mappers.TagMapper;
 import pl.edu.wat.portal_gloszeniowy.entities.Comment;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 import pl.edu.wat.portal_gloszeniowy.entities.Tag;
+import pl.edu.wat.portal_gloszeniowy.models.User;
 import pl.edu.wat.portal_gloszeniowy.repositories.CommentRepository;
 import pl.edu.wat.portal_gloszeniowy.repositories.OfferRepository;
 import pl.edu.wat.portal_gloszeniowy.repositories.TagRepository;
@@ -45,13 +46,24 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
-    public List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto) {
+    public List<OfferResponseDto> getUserOffers(String userName) {
         TagMapper tagMapper = new TagMapper();
-        List<OfferResponseDto> responseDtos = StreamSupport.stream(offerRepository.findAll().spliterator(), false)
+        User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
+        return StreamSupport.stream(offerRepository.findByUser(user).spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName) {
+        TagMapper tagMapper = new TagMapper();
+        List<OfferResponseDto> responseDtos = new LinkedList<>();
+        if(userName=="")
+            responseDtos= getAllOffers();
+        else
+            responseDtos= getUserOffers(userName);
         List<OfferResponseDto> matchOffers =responseDtos;
         for (OfferResponseDto offerResponse:
              responseDtos) {
@@ -121,6 +133,7 @@ public class OfferServiceImpl implements OfferService{
         offer.setUser(userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName)));
         offerRepository.save(offer);
         userDetailsService.addOfferToUser(userName, offer);
+//        tagService.addOfferToTag(offer, offer.getTagList());
 
     }
 
@@ -169,8 +182,9 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
-    public void deleteOffer(Long offerId) {
+    public void deleteOffer(Long offerId, String userName) {
         Optional<Offer> offerDB = offerRepository.findById(offerId);
+        User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
         if(offerDB.isPresent())
         {
             Offer offer = offerDB.get();
@@ -178,6 +192,11 @@ public class OfferServiceImpl implements OfferService{
                     offer.getComments()) {
                 commentRepository.delete(comment);
             }
+            List<Offer> oofers = user.getOffers();
+            oofers.remove(offer);
+            user.setOffers(oofers);
+            userRepository.save(user);
+            offer.setTagList(null);
             offerRepository.delete(offer);
         }
         else throw new IllegalArgumentException("Bad id");

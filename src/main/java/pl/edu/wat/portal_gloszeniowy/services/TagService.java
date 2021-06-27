@@ -17,4 +17,8 @@ public interface TagService {
     TagResponseDto getTag(Long tagId);
 
     List<Offer> addTagOffer(Offer offer, Tag tag);
+
+    void deleteTag(Tag tag);
+
+    void addOfferToTag(Offer offer, List<Tag> tags);
 }

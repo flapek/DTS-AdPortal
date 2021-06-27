@@ -33,17 +33,39 @@ public class OfferController {
     {
         return new ResponseEntity<List<OfferResponseDto>>(offerService.getAllOffers(), HttpStatus.OK);
     }
+
+    @GetMapping(path = "/myOffers")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<List<OfferResponseDto>> getUserOffers(Principal principal)
+    {
+        return new ResponseEntity<List<OfferResponseDto>>(offerService.getUserOffers(principal.getName()), HttpStatus.OK);
+    }
+
     @GetMapping(path = "/filters/")
     public ResponseEntity<List<OfferResponseDto>> getAllOfferss()
     {
         return new ResponseEntity<List<OfferResponseDto>>(offerService.getAllOffers(), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/myFilters/")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<List<OfferResponseDto>> getUserOfferss(Principal principal)
+    {
+        return new ResponseEntity<List<OfferResponseDto>>(offerService.getUserOffers(principal.getName()), HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/myFilters/{tags}", method=RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<List<OfferResponseDto>> getMyFilteredOffers(@PathVariable String[] tags, Principal principal)
+    {
+        return new ResponseEntity<>(offerService.getFilteredOffers(new FilterOptionsRequestDto(tags, null), principal.getName()), HttpStatus.OK);
+    }
+
     @RequestMapping(value="/filters/{tags}", method=RequestMethod.GET)
     @ResponseBody
     public ResponseEntity<List<OfferResponseDto>> getFilteredOffers(@PathVariable String[] tags)
     {
-        return new ResponseEntity<>(offerService.getFilteredOffers(new FilterOptionsRequestDto(tags, null)), HttpStatus.OK);
+        return new ResponseEntity<>(offerService.getFilteredOffers(new FilterOptionsRequestDto(tags, null), ""), HttpStatus.OK);
     }
 
     @GetMapping(path = "/offer/{id}")
@@ -80,9 +102,9 @@ public class OfferController {
 
     @DeleteMapping(path = "/delete-offer/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity deleteOffer(@PathVariable("id") Long id)
+    public ResponseEntity deleteOffer(@PathVariable("id") Long id, Principal principal)
     {
-        offerService.deleteOffer(id);
+        offerService.deleteOffer(id, principal.getName());
         return new ResponseEntity(HttpStatus.OK);
     }
 
