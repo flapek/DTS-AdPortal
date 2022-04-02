@@ -13,5 +13,5 @@ import java.util.List;
 @Setter
 public class OffersWithPagesCountResponseDto {
     private List<OfferResponseDto> offers;
-    private Integer pagesCount;
+    private Long pagesCount;
 }

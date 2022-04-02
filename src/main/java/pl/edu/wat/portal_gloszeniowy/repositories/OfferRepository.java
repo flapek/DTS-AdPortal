@@ -1,6 +1,7 @@
 package pl.edu.wat.portal_gloszeniowy.repositories;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
@@ -13,4 +14,6 @@ import java.util.List;
 public interface OfferRepository extends CrudRepository<Offer, Long> {
     Iterable<Offer> findByUser(User user);
     Iterable<Offer> findAll(Pageable pageable);
+
+    Integer countByUser(User user);
 }

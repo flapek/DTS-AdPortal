@@ -33,19 +33,20 @@ public class OfferServiceImpl implements OfferService{
     private final UserRepository userRepository;
     private final UserDetailsServiceImpl userDetailsService;
     private final CommentRepository commentRepository;
+    private final static int PAGES_PER_SITE = 9;
 
 
 
     @Override
     public OffersWithPagesCountResponseDto getAllOffers(Integer pageNumber) {
         TagMapper tagMapper = new TagMapper();
-        List<OfferResponseDto> offers =  StreamSupport.stream(offerRepository.findAll(PageRequest.of(pageNumber, 9)).spliterator(), false)
+        List<OfferResponseDto> offers =  StreamSupport.stream(offerRepository.findAll(PageRequest.of(pageNumber, PAGES_PER_SITE)).spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
         int pagesCount = offers.size();
-        return new OffersWithPagesCountResponseDto(offers, pagesCount/9);
+        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
     }
 
     @Override
@@ -58,7 +59,7 @@ public class OfferServiceImpl implements OfferService{
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
         int pagesCount = offers.size();
-        return new OffersWithPagesCountResponseDto(offers, pagesCount/9);
+        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
     }
 
     @Override
@@ -120,16 +121,18 @@ public class OfferServiceImpl implements OfferService{
     @Override
     public void addOffer(MultipartFile file, String title, float price, String details, List<String> tags, String userName) {
         Offer offer = new Offer();
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        TagMapper tagMapper = new TagMapper();
-        if(fileName.contains(".."))
-        {
-            System.out.println("not a a valid file");
-        }
-        try {
-            offer.setPhotos(Base64.getEncoder().encodeToString(file.getBytes()));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(file != null) {
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            TagMapper tagMapper = new TagMapper();
+            if(fileName.contains(".."))
+            {
+                System.out.println("not a a valid file");
+            }
+            try {
+                offer.setPhotos(Base64.getEncoder().encodeToString(file.getBytes()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         offer.setTitle(title);
         offer.setPrice(price);
