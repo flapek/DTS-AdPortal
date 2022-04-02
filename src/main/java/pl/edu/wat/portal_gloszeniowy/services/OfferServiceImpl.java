@@ -1,6 +1,7 @@
 package pl.edu.wat.portal_gloszeniowy.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Optionals;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -36,45 +37,50 @@ public class OfferServiceImpl implements OfferService{
 
 
     @Override
-    public List<OfferResponseDto> getAllOffers() {
+    public OffersWithPagesCountResponseDto getAllOffers(Integer pageNumber) {
         TagMapper tagMapper = new TagMapper();
-        return StreamSupport.stream(offerRepository.findAll().spliterator(), false)
+        List<OfferResponseDto> offers =  StreamSupport.stream(offerRepository.findAll(PageRequest.of(pageNumber, 9)).spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
+        int pagesCount = offers.size();
+        return new OffersWithPagesCountResponseDto(offers, pagesCount/9);
     }
 
     @Override
-    public List<OfferResponseDto> getUserOffers(String userName) {
+    public OffersWithPagesCountResponseDto getUserOffers(String userName) {
         TagMapper tagMapper = new TagMapper();
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
-        return StreamSupport.stream(offerRepository.findByUser(user).spliterator(), false)
+        List<OfferResponseDto> offers = StreamSupport.stream(offerRepository.findByUser(user).spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
+        int pagesCount = offers.size();
+        return new OffersWithPagesCountResponseDto(offers, pagesCount/9);
     }
 
     @Override
-    public List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName) {
-        TagMapper tagMapper = new TagMapper();
-        List<OfferResponseDto> responseDtos = new LinkedList<>();
-        if(userName=="")
-            responseDtos= getAllOffers();
-        else
-            responseDtos= getUserOffers(userName);
-        List<OfferResponseDto> matchOffers =responseDtos;
-        for (OfferResponseDto offerResponse:
-             responseDtos) {
-            for (String stringTag:
-                 filterOptionsRequestDto.getTags()) {
-                matchOffers.removeIf(t -> !tagMapper.toStringTagList(t.getTags()).contains(stringTag));
-            }
-        }
-
-        System.out.println(matchOffers);
-        return matchOffers;
+    public OffersWithPagesCountResponseDto getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName) {
+//        TagMapper tagMapper = new TagMapper();
+//        List<OfferResponseDto> responseDtos = new LinkedList<>();
+//        if(userName=="")
+//            responseDtos= getAllOffers();
+//        else
+//            responseDtos= getUserOffers(userName);
+//        List<OfferResponseDto> matchOffers =responseDtos;
+//        for (OfferResponseDto offerResponse:
+//             responseDtos) {
+//            for (String stringTag:
+//                 filterOptionsRequestDto.getTags()) {
+//                matchOffers.removeIf(t -> !tagMapper.toStringTagList(t.getTags()).contains(stringTag));
+//            }
+//        }
+//
+//        System.out.println(matchOffers);
+//        return matchOffers;
+        return new OffersWithPagesCountResponseDto();
     }
 
     @Override

@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.edu.wat.portal_gloszeniowy.dtos.FilterOptionsRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.OfferRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.OfferResponseDto;
+import pl.edu.wat.portal_gloszeniowy.dtos.OffersWithPagesCountResponseDto;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 import pl.edu.wat.portal_gloszeniowy.services.OfferService;
 
@@ -22,23 +23,23 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@CrossOrigin(origins = "https://portal-ogloszeniowy-f.herokuapp.com/")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class OfferController {
 
     private final OfferService offerService;
 
 
-    @GetMapping(path = "/offers")
-    public ResponseEntity<List<OfferResponseDto>> getAllOffers()
+    @GetMapping(path = "/offers/{pageNumber}")
+    public ResponseEntity<OffersWithPagesCountResponseDto> getAllOffers(@PathVariable Integer pageNumber)
     {
-        return new ResponseEntity<List<OfferResponseDto>>(offerService.getAllOffers(), HttpStatus.OK);
+        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getAllOffers(pageNumber), HttpStatus.OK);
     }
 
     @GetMapping(path = "/myOffers")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<List<OfferResponseDto>> getUserOffers(Principal principal)
+    public ResponseEntity<OffersWithPagesCountResponseDto> getUserOffers(Principal principal)
     {
-        return new ResponseEntity<List<OfferResponseDto>>(offerService.getUserOffers(principal.getName()), HttpStatus.OK);
+        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getUserOffers(principal.getName()), HttpStatus.OK);
     }
 
     @GetMapping(path = "/filters/")
@@ -49,9 +50,9 @@ public class OfferController {
 
     @GetMapping(path = "/myFilters/")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<List<OfferResponseDto>> getUserOfferss(Principal principal)
+    public ResponseEntity<OffersWithPagesCountResponseDto> getUserOfferss(Principal principal)
     {
-        return new ResponseEntity<List<OfferResponseDto>>(offerService.getUserOffers(principal.getName()), HttpStatus.OK);
+        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getUserOffers(principal.getName()), HttpStatus.OK);
     }
 
     @RequestMapping(value="/myFilters/{tags}", method=RequestMethod.GET)
