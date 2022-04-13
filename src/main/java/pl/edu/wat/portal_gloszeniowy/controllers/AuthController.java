@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "https://portal-ogloszeniowy-f.herokuapp.com/")
+@CrossOrigin(origins = "http://localhost:3000/")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController
@@ -73,15 +73,13 @@ public class AuthController
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
     {
         if (userRepository.existsByUsername(signUpRequest.getUsername())){
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+
+            return new ResponseEntity<>("Taka nazwa użytkownika już istnieje!", HttpStatus.BAD_REQUEST);
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return ResponseEntity
-                    .badRequest()
-                    .body(new MessageResponse("Error: Email is already in use!"));
+
+            return new ResponseEntity<>("Taki email już istnieje!", HttpStatus.BAD_REQUEST);
         }
 
         //Create new user's account
@@ -125,8 +123,6 @@ public class AuthController
         user.setOffers(offers);
         userRepository.save(user);
 
-//       ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-
-        return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
+        return new ResponseEntity<>("Rejestracja przebiegła pomyślnie! Możesz się zalogować.", HttpStatus.OK);
     }
 }

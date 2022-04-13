@@ -40,7 +40,7 @@ public class OfferServiceImpl implements OfferService{
         TagMapper tagMapper = new TagMapper();
         return StreamSupport.stream(offerRepository.findAll().spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -51,7 +51,7 @@ public class OfferServiceImpl implements OfferService{
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
         return StreamSupport.stream(offerRepository.findByUser(user).spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -94,7 +94,7 @@ public class OfferServiceImpl implements OfferService{
                     offer.getPrice(),
                     offer.getDetais(),
                     offer.getPhotos(),
-                    offer.getUser().getUsername(),
+                    offer.getUser().getUsername(), offer.getDate(),
                     tagMapper.toTagResponseDtoList(offer.getTagList()));
         }
         else throw new IllegalArgumentException("Bad id");
@@ -131,6 +131,7 @@ public class OfferServiceImpl implements OfferService{
         offer.setTagList(new LinkedList<Tag>());
         offer.setTagList(tagService.addTags(tags, offer));
         offer.setUser(userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName)));
+        offer.setDate(new Date());
         offerRepository.save(offer);
         userDetailsService.addOfferToUser(userName, offer);
 //        tagService.addOfferToTag(offer, offer.getTagList());

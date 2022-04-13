@@ -13,7 +13,7 @@ import pl.edu.wat.portal_gloszeniowy.services.TagService;
 import java.util.List;
 
 @Controller
-@CrossOrigin(origins = "https://portal-ogloszeniowy-f.herokuapp.com/")
+@CrossOrigin(origins = "http://localhost:3000/")
 @AllArgsConstructor
 public class TagController {
 

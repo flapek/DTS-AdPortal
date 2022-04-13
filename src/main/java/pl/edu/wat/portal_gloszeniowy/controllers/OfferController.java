@@ -22,7 +22,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@CrossOrigin(origins = "https://portal-ogloszeniowy-f.herokuapp.com/")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class OfferController {
 
     private final OfferService offerService;
@@ -65,13 +65,14 @@ public class OfferController {
     @ResponseBody
     public ResponseEntity<List<OfferResponseDto>> getFilteredOffers(@PathVariable String[] tags)
     {
+        System.out.println(Arrays.toString(tags));
         return new ResponseEntity<>(offerService.getFilteredOffers(new FilterOptionsRequestDto(tags, null), ""), HttpStatus.OK);
     }
 
     @GetMapping(path = "/offer/{id}")
     public ResponseEntity<OfferResponseDto> getOffer(@PathVariable("id") Long id)
     {
-        return new ResponseEntity<OfferResponseDto>(offerService.getOfferDto(id), HttpStatus.OK);
+        return new ResponseEntity<>(offerService.getOfferDto(id), HttpStatus.OK);
     }
 
     @PostMapping(path = "/addOffer")
