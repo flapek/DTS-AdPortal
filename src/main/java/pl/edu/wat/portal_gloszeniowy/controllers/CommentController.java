@@ -10,11 +10,12 @@ import pl.edu.wat.portal_gloszeniowy.dtos.CommentRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.CommentResponseDto;
 import pl.edu.wat.portal_gloszeniowy.services.CommentService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class CommentController {
 
     private final CommentService commentService;
@@ -29,10 +30,11 @@ public class CommentController {
 
     @PostMapping(path = "/offer/addComment")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity addCommentToOffer(@RequestBody CommentRequestDto commentRequestDto)
+    public ResponseEntity addCommentToOffer(@RequestBody CommentRequestDto commentRequestDto,
+                                            Principal principal)
     {
         System.out.println(commentRequestDto.getContent());
-        commentService.addComment(commentRequestDto);
+        commentService.addComment(commentRequestDto, principal.getName());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
