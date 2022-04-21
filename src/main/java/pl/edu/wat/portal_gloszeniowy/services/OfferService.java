@@ -1,20 +1,27 @@
 package pl.edu.wat.portal_gloszeniowy.services;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
-import pl.edu.wat.portal_gloszeniowy.dtos.FilterOptionsRequestDto;
-import pl.edu.wat.portal_gloszeniowy.dtos.OfferRequestDto;
-import pl.edu.wat.portal_gloszeniowy.dtos.OfferResponseDto;
-import pl.edu.wat.portal_gloszeniowy.dtos.TagRequestDto;
+import pl.edu.wat.portal_gloszeniowy.dtos.*;
+import pl.edu.wat.portal_gloszeniowy.dtos.enums.SortType;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
+import pl.edu.wat.portal_gloszeniowy.entities.Tag;
+import pl.edu.wat.portal_gloszeniowy.models.User;
 
+import java.awt.print.Pageable;
+import java.util.Collection;
 import java.util.List;
 
 public interface OfferService {
 
-    List<OfferResponseDto> getAllOffers();
-    List<OfferResponseDto> getUserOffers(String userName);
-    List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName);
-    List<OfferResponseDto> getTagOffers(TagRequestDto tagRequestDto);
+    OffersWithPagesCountResponseDto getAllOffers(Integer pageNumber);
+    OffersWithPagesCountResponseDto getUserOffers(String userName, Integer pageNumber);
+    OffersWithPagesCountResponseDto getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto);
+    OffersWithPagesCountResponseDto getUserFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName);
+    List<OfferResponseDto> getAllOffersSorted(Integer pageNumber, SortType sortType);
+    List<OfferResponseDto> getFilteredOffersSorted(Collection<List<Tag>> tags, Integer pageNumber, SortType sortType);
+    List<OfferResponseDto> getUserOffersSorted(Integer pageNumber, SortType sortType, User user);
+    List<OfferResponseDto> getUserFilteredOffersSorted(Collection<List<Tag>> tags, Integer pageNumber, SortType sortType, User user);
     OfferResponseDto getOfferDto(Long offerId);
     Offer getOffer(Long offerId);
 
@@ -25,5 +32,7 @@ public interface OfferService {
     void deleteOffer(Long offerId, String userName);
 
     void addImage(MultipartFile multipartFile);
+
+    PageRequest createPageable(int pageNumber, SortType sortType);
 
 }

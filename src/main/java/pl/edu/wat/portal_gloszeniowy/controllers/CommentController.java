@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@CrossOrigin(origins = "https://portal-ogloszeniowy-f.herokuapp.com/")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class CommentController {
 
     private final CommentService commentService;
