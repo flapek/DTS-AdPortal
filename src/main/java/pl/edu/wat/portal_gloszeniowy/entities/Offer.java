@@ -18,7 +18,7 @@ public class Offer {
     private Long id;
     private String title;
     private float price;
-    private String detais;
+    private String details;
     private Date date;
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")

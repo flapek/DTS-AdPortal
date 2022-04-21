@@ -14,7 +14,7 @@ public class OfferResponseDto {
     protected Long id;
     private String title;
     private float price;
-    private String detais;
+    private String details;
     private String photos;
     private String userLogin;
     private Date date;

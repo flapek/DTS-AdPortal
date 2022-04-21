@@ -40,7 +40,7 @@ public class OfferServiceImpl implements OfferService{
         TagMapper tagMapper = new TagMapper();
         return StreamSupport.stream(offerRepository.findAll().spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
+                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -51,7 +51,7 @@ public class OfferServiceImpl implements OfferService{
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
         return StreamSupport.stream(offerRepository.findByUser(user).spliterator(), false)
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
+                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -60,7 +60,7 @@ public class OfferServiceImpl implements OfferService{
     public List<OfferResponseDto> getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName) {
         TagMapper tagMapper = new TagMapper();
         List<OfferResponseDto> responseDtos = new LinkedList<>();
-        if(userName=="")
+        if(Objects.equals(userName, ""))
             responseDtos= getAllOffers();
         else
             responseDtos= getUserOffers(userName);
@@ -92,7 +92,7 @@ public class OfferServiceImpl implements OfferService{
             return new OfferResponseDto(offer.getId(),
                     offer.getTitle(),
                     offer.getPrice(),
-                    offer.getDetais(),
+                    offer.getDetails(),
                     offer.getPhotos(),
                     offer.getUser().getUsername(), offer.getDate(),
                     tagMapper.toTagResponseDtoList(offer.getTagList()));
@@ -127,7 +127,7 @@ public class OfferServiceImpl implements OfferService{
         }
         offer.setTitle(title);
         offer.setPrice(price);
-        offer.setDetais(details);
+        offer.setDetails(details);
         offer.setTagList(new LinkedList<Tag>());
         offer.setTagList(tagService.addTags(tags, offer));
         offer.setUser(userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName)));
@@ -174,7 +174,7 @@ public class OfferServiceImpl implements OfferService{
             }
             offer.setTitle(title);
             offer.setPrice(price);
-            offer.setDetais(details);
+            offer.setDetails(details);
             offer.setTagList(new LinkedList<Tag>());
             offer.setTagList(tagService.addTags(tags, offer));
             offerRepository.save(offer);

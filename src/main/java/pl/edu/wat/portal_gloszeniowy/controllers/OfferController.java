@@ -84,6 +84,7 @@ public class OfferController {
                                    @RequestParam("tags") String[] tags,
                                    Principal principal)
     {
+        System.out.println(Arrays.toString(tags));
         offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
         return new ResponseEntity(HttpStatus.CREATED);
     }

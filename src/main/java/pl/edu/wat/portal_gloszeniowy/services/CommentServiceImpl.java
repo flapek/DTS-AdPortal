@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class CommentServiceImpl implements CommentService{
-
-
     private final CommentRepository commentRepository;
     private final OfferRepository offerRepository;
     private final OfferService offerService;
@@ -35,8 +33,8 @@ public class CommentServiceImpl implements CommentService{
         Comment comment = new Comment();
         Offer offer = offerService.getOffer(commentRequestDto.getOfferId());
         List<Comment> commentList = offer.getComments();
-        comment.setUser(null);
-        comment.setOfeer(offer);
+        comment.setUser(commentRequestDto.getUsername());
+        comment.setOffer(offer);
         comment.setContent(commentRequestDto.getContent());
         commentRepository.save(comment);
         commentList.add(comment);

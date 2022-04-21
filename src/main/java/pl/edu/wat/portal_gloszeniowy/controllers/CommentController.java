@@ -22,7 +22,9 @@ public class CommentController {
     @GetMapping(path = "/offer/{offerId}/comments")
     public ResponseEntity<List<CommentResponseDto>> getOfferComments(@PathVariable("offerId") Long offerId)
     {
-        return new ResponseEntity<>(commentService.getOfferComments(offerId), HttpStatus.OK);
+        List<CommentResponseDto> comments = commentService.getOfferComments(offerId);
+        if(comments.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        else return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @PostMapping(path = "/offer/addComment")
