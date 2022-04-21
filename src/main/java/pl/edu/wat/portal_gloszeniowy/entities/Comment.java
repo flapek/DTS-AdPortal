@@ -15,6 +15,5 @@ public class Comment {
     private String user;
 
     @ManyToOne
-    private Offer ofeer;
-
+    private Offer offer;
 }

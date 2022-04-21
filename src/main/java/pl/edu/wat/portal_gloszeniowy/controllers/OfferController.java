@@ -85,7 +85,7 @@ public class OfferController {
     @GetMapping(path = "/offer/{id}")
     public ResponseEntity<OfferResponseDto> getOffer(@PathVariable("id") Long id)
     {
-        return new ResponseEntity<OfferResponseDto>(offerService.getOfferDto(id), HttpStatus.OK);
+        return new ResponseEntity<>(offerService.getOfferDto(id), HttpStatus.OK);
     }
 
     @PostMapping(path = "/addOffer")
@@ -97,6 +97,7 @@ public class OfferController {
                                    @RequestParam("tags") String[] tags,
                                    Principal principal)
     {
+        System.out.println(Arrays.toString(tags));
         offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
         return new ResponseEntity(HttpStatus.CREATED);
     }

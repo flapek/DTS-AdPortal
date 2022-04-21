@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentRequestDto {
-
     private String content;
     private Long offerId;
+    private String username;
 }

@@ -1,8 +1,6 @@
 package pl.edu.wat.portal_gloszeniowy.models;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 
 import javax.persistence.*;

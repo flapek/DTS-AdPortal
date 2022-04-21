@@ -55,7 +55,7 @@ public class OfferServiceImpl implements OfferService {
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
         List<OfferResponseDto> offers = offerRepository.findByUserAndTagListIn(user, tags, PageRequest.of(pageNumber, PAGES_PER_SITE)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
         return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
@@ -110,7 +110,7 @@ public class OfferServiceImpl implements OfferService {
         TagMapper tagMapper = new TagMapper();
         return offerRepository.findAll(createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -124,6 +124,7 @@ public class OfferServiceImpl implements OfferService {
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
+
 
     @Override
     public List<OfferResponseDto> getUserOffersSorted(Integer pageNumber, SortType sortType, User user) {
@@ -155,9 +156,9 @@ public class OfferServiceImpl implements OfferService {
             return new OfferResponseDto(offer.getId(),
                     offer.getTitle(),
                     offer.getPrice(),
-                    offer.getDetais(),
+                    offer.getDetails(),
                     offer.getPhotos(),
-                    offer.getUser().getUsername(),
+                    offer.getUser().getUsername(), offer.getDate(),
                     tagMapper.toTagResponseDtoList(offer.getTagList()));
         } else throw new IllegalArgumentException("Bad id");
     }
@@ -187,10 +188,11 @@ public class OfferServiceImpl implements OfferService {
         }
         offer.setTitle(title);
         offer.setPrice(price);
-        offer.setDetais(details);
+        offer.setDetails(details);
         offer.setTagList(new LinkedList<Tag>());
         offer.setTagList(tagService.addTags(tags, offer));
         offer.setUser(userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName)));
+        offer.setDate(new Date());
         offerRepository.save(offer);
         userDetailsService.addOfferToUser(userName, offer);
 //        tagService.addOfferToTag(offer, offer.getTagList());
@@ -229,7 +231,7 @@ public class OfferServiceImpl implements OfferService {
             }
             offer.setTitle(title);
             offer.setPrice(price);
-            offer.setDetais(details);
+            offer.setDetails(details);
             offer.setTagList(new LinkedList<Tag>());
             offer.setTagList(tagService.addTags(tags, offer));
             offerRepository.save(offer);

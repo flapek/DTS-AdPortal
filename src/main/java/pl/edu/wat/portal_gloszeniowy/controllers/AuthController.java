@@ -73,11 +73,13 @@ public class AuthController
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest)
     {
         if (userRepository.existsByUsername(signUpRequest.getUsername())){
-            return new ResponseEntity<>("Istnieje juz użytkownik o podanej nazwie użytkownika!", HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>("Taka nazwa użytkownika już istnieje!", HttpStatus.BAD_REQUEST);
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            return new ResponseEntity<>("Istnieje juz użytkownik o podanym mailu!", HttpStatus.BAD_REQUEST);
+
+            return new ResponseEntity<>("Taki email już istnieje!", HttpStatus.BAD_REQUEST);
         }
 
         //Create new user's account
@@ -121,8 +123,6 @@ public class AuthController
         user.setOffers(offers);
         userRepository.save(user);
 
-//       ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-
-        return new ResponseEntity<>("User registered successfully!", HttpStatus.OK);
+        return new ResponseEntity<>("Rejestracja przebiegła pomyślnie! Możesz się zalogować.", HttpStatus.OK);
     }
 }
