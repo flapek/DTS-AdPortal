@@ -28,6 +28,7 @@ public class TagServiceImpl implements TagService{
         {
             Tag newTag = new Tag();
             newTag.setName(tagRequestDto);
+            newTag.setOfferList(new LinkedList<>());
             tagRepository.save(newTag);
             return newTag;
         }

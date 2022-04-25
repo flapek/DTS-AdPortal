@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 import pl.edu.wat.portal_gloszeniowy.dtos.FilterOptionsRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.OfferResponseDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.OffersWithPagesCountResponseDto;
-import pl.edu.wat.portal_gloszeniowy.dtos.TagRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.enums.SortType;
 import pl.edu.wat.portal_gloszeniowy.dtos.mappers.TagMapper;
 import pl.edu.wat.portal_gloszeniowy.entities.Comment;
@@ -23,9 +22,7 @@ import pl.edu.wat.portal_gloszeniowy.repositories.TagRepository;
 import pl.edu.wat.portal_gloszeniowy.repositories.UserRepository;
 import pl.edu.wat.portal_gloszeniowy.security.services.UserDetailsServiceImpl;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,33 +39,36 @@ public class OfferServiceImpl implements OfferService {
     private final static int PAGES_PER_SITE = 9;
 
 
-    @Override
-    public OffersWithPagesCountResponseDto getAllOffers(Integer pageNumber) {
-        List<OfferResponseDto> offers = getAllOffersSorted(pageNumber, SortType.SORT_BY_TITLE_DESC);
-        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
-    }
-
-    @Override
-    public OffersWithPagesCountResponseDto getUserOffers(String userName, Integer pageNumber) {
-        TagMapper tagMapper = new TagMapper();
-        Collection<List<Tag>> tags = Collections.singleton(tagRepository.findAll());
-        User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
-        List<OfferResponseDto> offers = offerRepository.findByUserAndTagListIn(user, tags, PageRequest.of(pageNumber, PAGES_PER_SITE)).stream()
-                .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
-                        tagMapper.toTagResponseDtoList(offer.getTagList())))
-                .collect(Collectors.toList());
-        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
-    }
+//    @Override
+//    public OffersWithPagesCountResponseDto getAllOffers(Integer pageNumber) {
+//        List<OfferResponseDto> offers = getAllOffersSorted(pageNumber, SortType.SORT_BY_TITLE_DESC);
+//        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
+//    }
+//
+//    @Override
+//    public OffersWithPagesCountResponseDto getUserOffers(String userName, Integer pageNumber) {
+//        TagMapper tagMapper = new TagMapper();
+//        Collection<List<Tag>> tags = Collections.singleton(tagRepository.findAll());
+//        User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
+//        List<OfferResponseDto> offers = offerRepository.findByUserAndTagListIn(user, tags, PageRequest.of(pageNumber, PAGES_PER_SITE)).stream()
+//                .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
+//                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
+//                        tagMapper.toTagResponseDtoList(offer.getTagList())))
+//                .collect(Collectors.toList());
+//        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
+//    }
 
     @Override
     public OffersWithPagesCountResponseDto getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto) {
+
         List<OfferResponseDto> offers = new LinkedList<>();
-        SortType sortType = filterOptionsRequestDto.getSort() != null ? SortType.valueOf(filterOptionsRequestDto.getSort()): SortType.SORT_BY_PRICE_ASC;
-        if(filterOptionsRequestDto.getTags() == null) {
+        SortType sortType = filterOptionsRequestDto.getSort() != null ? SortType.valueOf(filterOptionsRequestDto.getSort()) : SortType.SORT_BY_DATE_DESC;
+        if (filterOptionsRequestDto.getTags() == null) {
             offers = getAllOffersSorted(filterOptionsRequestDto.getPageNumber(), sortType);
         } else {
-            offers = getFilteredOffersSorted(Collections.singleton(tagRepository.findAll()), filterOptionsRequestDto.getPageNumber(), sortType);
+            offers = getFilteredOffersSorted(filterOptionsRequestDto.getTags(), filterOptionsRequestDto.getPageNumber(), sortType);
+            // TODO zmienic na filtrowanie zapytaniem po przejsciu na PostgreSQL
+//            offers = getFilteredOffersSorted(Collections.singleton(tagRepository.findByNameIn(Arrays.asList(filterOptionsRequestDto.getTags()))), filterOptionsRequestDto.getPageNumber(), sortType);
         }
 //        TagMapper tagMapper = new TagMapper();
 //        List<OfferResponseDto> responseDtos = new LinkedList<>();
@@ -89,20 +89,20 @@ public class OfferServiceImpl implements OfferService {
 //        return matchOffers;
 
 
-        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
+        return new OffersWithPagesCountResponseDto(offers, offerRepository.count()/PAGES_PER_SITE); // FIXME brana jest zawsze liczba wszystkich ofert
     }
 
     @Override
     public OffersWithPagesCountResponseDto getUserFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName) {
         List<OfferResponseDto> offers = new LinkedList<>();
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
-        SortType sortType = filterOptionsRequestDto.getSort() != null ? SortType.valueOf(filterOptionsRequestDto.getSort()): SortType.SORT_BY_PRICE_ASC;
-        if(filterOptionsRequestDto.getTags() == null) {
+        SortType sortType = filterOptionsRequestDto.getSort() != null ? SortType.valueOf(filterOptionsRequestDto.getSort()) : SortType.SORT_BY_DATE_DESC;
+        if (filterOptionsRequestDto.getTags() == null) {
             offers = getUserOffersSorted(filterOptionsRequestDto.getPageNumber(), sortType, user);
         } else {
             offers = getUserFilteredOffersSorted(Collections.singleton(tagRepository.findAll()), filterOptionsRequestDto.getPageNumber(), sortType, user);
         }
-        return new OffersWithPagesCountResponseDto(offers, offerRepository.count());
+        return new OffersWithPagesCountResponseDto(offers, offerRepository.count()/PAGES_PER_SITE); // FIXME brana jest zawsze liczba wszystkich ofert
     }
 
     @Override
@@ -120,18 +120,34 @@ public class OfferServiceImpl implements OfferService {
         TagMapper tagMapper = new TagMapper();
         return offerRepository.findByTagListIn(tags, createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<OfferResponseDto> getFilteredOffersSorted(String[] tags, Integer pageNumber, SortType sortType) {
+        TagMapper tagMapper = new TagMapper();
+        List<OfferResponseDto> responseDtos = new LinkedList<>();
+        responseDtos = getAllOffersSorted(pageNumber, sortType);
+        ;
+        List<OfferResponseDto> matchOffers = responseDtos;
+        for (OfferResponseDto offerResponse :
+                responseDtos) {
+            for (String stringTag :
+                    tags) {
+                matchOffers.removeIf(t -> !tagMapper.toStringTagList(t.getTags()).contains(stringTag));
+            }
+        }
+        return matchOffers;
+    }
 
     @Override
     public List<OfferResponseDto> getUserOffersSorted(Integer pageNumber, SortType sortType, User user) {
         TagMapper tagMapper = new TagMapper();
         return offerRepository.findByUser(user, createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -141,9 +157,26 @@ public class OfferServiceImpl implements OfferService {
         TagMapper tagMapper = new TagMapper();
         return offerRepository.findByUserAndTagListIn(user, tags, createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
-                        offer.getDetais(), offer.getPhotos(), offer.getUser().getUsername(),
+                        offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OfferResponseDto> getUserFilteredOffersSorted(String[] tags, Integer pageNumber, SortType sortType, User user) {
+        TagMapper tagMapper = new TagMapper();
+        List<OfferResponseDto> responseDtos = new LinkedList<>();
+        responseDtos = getUserOffersSorted(pageNumber, sortType, user);
+        ;
+        List<OfferResponseDto> matchOffers = responseDtos;
+        for (OfferResponseDto offerResponse :
+                responseDtos) {
+            for (String stringTag :
+                    tags) {
+                matchOffers.removeIf(t -> !tagMapper.toStringTagList(t.getTags()).contains(stringTag));
+            }
+        }
+        return matchOffers;
     }
 
 
@@ -195,7 +228,7 @@ public class OfferServiceImpl implements OfferService {
         offer.setDate(new Date());
         offerRepository.save(offer);
         userDetailsService.addOfferToUser(userName, offer);
-//        tagService.addOfferToTag(offer, offer.getTagList());
+        tagService.addOfferToTag(offer, offer.getTagList());
 
     }
 
@@ -249,8 +282,12 @@ public class OfferServiceImpl implements OfferService {
                 return PageRequest.of(pageNumber, PAGES_PER_SITE, Sort.by("title").descending());
             case SORT_BY_TITLE_ASC:
                 return PageRequest.of(pageNumber, PAGES_PER_SITE, Sort.by("title").ascending());
+            case SORT_BY_DATE_ASC:
+                return PageRequest.of(pageNumber, PAGES_PER_SITE, Sort.by("date").ascending());
+            case SORT_BY_DATE_DESC:
+                return PageRequest.of(pageNumber, PAGES_PER_SITE, Sort.by("date").descending());
             default:
-                return PageRequest.of(pageNumber, PAGES_PER_SITE, Sort.by("price").descending());
+                return PageRequest.of(pageNumber, PAGES_PER_SITE, Sort.by("date").descending());
         }
     }
 

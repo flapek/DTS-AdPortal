@@ -1,6 +1,7 @@
 package pl.edu.wat.portal_gloszeniowy.controllers;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,7 +15,7 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000/")
 public class CommentController {
 

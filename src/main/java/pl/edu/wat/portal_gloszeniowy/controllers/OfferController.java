@@ -29,19 +29,19 @@ public class OfferController {
     private final OfferService offerService;
 
 
-    @GetMapping(path = "/offers/{pageNumber}")
-    public ResponseEntity<OffersWithPagesCountResponseDto> getAllOffers(@PathVariable Integer pageNumber)
-    {
-        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getAllOffers(pageNumber), HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/myOffers/{pageNumber}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<OffersWithPagesCountResponseDto> getUserOffers(@PathVariable Integer pageNumber,
-                                                                         Principal principal)
-    {
-        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getUserOffers(principal.getName(), pageNumber), HttpStatus.OK);
-    }
+//    @GetMapping(path = "/offers/{pageNumber}")
+//    public ResponseEntity<OffersWithPagesCountResponseDto> getAllOffers(@PathVariable Integer pageNumber)
+//    {
+//        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getAllOffers(pageNumber), HttpStatus.OK);
+//    }
+//
+//    @GetMapping(path = "/myOffers/{pageNumber}")
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    public ResponseEntity<OffersWithPagesCountResponseDto> getUserOffers(@PathVariable Integer pageNumber,
+//                                                                         Principal principal)
+//    {
+//        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getUserOffers(principal.getName(), pageNumber), HttpStatus.OK);
+//    }
 
 //    @GetMapping(path = "/filters/")
 //    public ResponseEntity<List<OfferResponseDto>> getAllOfferss()

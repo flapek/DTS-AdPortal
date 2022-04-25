@@ -16,12 +16,12 @@ import java.util.List;
 public interface OfferRepository extends JpaRepository<Offer, Long> {
     List<Offer> findByTagListIn(Collection<List<Tag>> tagList, Pageable pageable);
 
+//    List<Offer> findByTagListIn(Collection<Tag> tagList, Pageable pageable);
+
     List<Offer> findByUser(User user, Pageable pageable);
 
     List<Offer> findByUserAndTagListIn(User user, Collection<List<Tag>> tagList, Pageable pageable);
 
     @NotNull
     Page<Offer> findAll(Pageable pageable);
-
-    // TODO https://www.baeldung.com/spring-data-jpa-query
 }

@@ -14,13 +14,15 @@ import java.util.List;
 
 public interface OfferService {
 
-    OffersWithPagesCountResponseDto getAllOffers(Integer pageNumber);
-    OffersWithPagesCountResponseDto getUserOffers(String userName, Integer pageNumber);
+//    OffersWithPagesCountResponseDto getAllOffers(Integer pageNumber);
+//    OffersWithPagesCountResponseDto getUserOffers(String userName, Integer pageNumber);
     OffersWithPagesCountResponseDto getFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto);
     OffersWithPagesCountResponseDto getUserFilteredOffers(FilterOptionsRequestDto filterOptionsRequestDto, String userName);
     List<OfferResponseDto> getAllOffersSorted(Integer pageNumber, SortType sortType);
     List<OfferResponseDto> getFilteredOffersSorted(Collection<List<Tag>> tags, Integer pageNumber, SortType sortType);
+    List<OfferResponseDto> getFilteredOffersSorted(String[] tags, Integer pageNumber, SortType sortType);
     List<OfferResponseDto> getUserOffersSorted(Integer pageNumber, SortType sortType, User user);
+    List<OfferResponseDto> getUserFilteredOffersSorted(String[] tags, Integer pageNumber, SortType sortType, User user);
     List<OfferResponseDto> getUserFilteredOffersSorted(Collection<List<Tag>> tags, Integer pageNumber, SortType sortType, User user);
     OfferResponseDto getOfferDto(Long offerId);
     Offer getOffer(Long offerId);
