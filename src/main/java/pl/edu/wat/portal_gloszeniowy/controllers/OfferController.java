@@ -1,9 +1,11 @@
 package pl.edu.wat.portal_gloszeniowy.controllers;
 
 import lombok.AllArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,9 +19,14 @@ import pl.edu.wat.portal_gloszeniowy.dtos.OffersWithPagesCountResponseDto;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 import pl.edu.wat.portal_gloszeniowy.services.OfferService;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -48,15 +55,20 @@ public class OfferController {
 
     @PostMapping(path = "/addOffer")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity addOffer(@RequestParam("file") MultipartFile multipartFile,
+    public ResponseEntity addOffer(@RequestParam(name = "file", required = false) MultipartFile multipartFile,
                                    @RequestParam("title") String title,
                                    @RequestParam("price") float price,
                                    @RequestParam("details") String details,
                                    @RequestParam("tags") String[] tags,
-                                   Principal principal)
-    {
-        System.out.println(Arrays.toString(tags));
-        offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
+                                   Principal principal) throws IOException {
+        if (multipartFile==null){
+            File file = new File("C:\\Users\\adamm\\IdeaProjects\\portal_gloszeniowy\\src\\main\\" +
+                    "resources\\static\\Default_photo.png");
+            FileInputStream input = new FileInputStream(file);
+            MultipartFile mFile = new MockMultipartFile("file",
+                    file.getName(), "text/plain", IOUtils.toByteArray(input));
+            offerService.addOffer(mFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
+        }else offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 

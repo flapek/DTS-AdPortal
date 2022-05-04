@@ -37,4 +37,5 @@ public interface OfferService {
 
     PageRequest createPageable(int pageNumber, SortType sortType);
 
+    void deleteComment(Long offerId, Long commentId);
 }

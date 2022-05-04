@@ -1,6 +1,7 @@
 package pl.edu.wat.portal_gloszeniowy.entities;
 
 import lombok.*;
+import org.hibernate.annotations.Type;
 import pl.edu.wat.portal_gloszeniowy.models.User;
 
 import javax.persistence.*;
@@ -22,13 +23,13 @@ public class Offer {
     private float price;
     private String details;
     private Date date;
+
     @Lob
-    @Column(columnDefinition = "BIGINT")
-    private String photos;
+    @Type(type = "org.hibernate.type.ImageType")
+    private byte[] photos;
 
     @OneToMany
     private List<Comment> comments;
-
 
     @ManyToMany
     private List<Tag> tagList;

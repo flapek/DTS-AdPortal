@@ -208,13 +208,13 @@ public class OfferServiceImpl implements OfferService {
     public void addOffer(MultipartFile file, String title, float price, String details, List<String> tags, String userName) {
         Offer offer = new Offer();
         if (file != null) {
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             TagMapper tagMapper = new TagMapper();
             if (fileName.contains("..")) {
                 System.out.println("not a a valid file");
             }
             try {
-                offer.setPhotos(Base64.getEncoder().encodeToString(file.getBytes()));
+                offer.setPhotos(file.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -224,7 +224,8 @@ public class OfferServiceImpl implements OfferService {
         offer.setDetails(details);
         offer.setTagList(new LinkedList<Tag>());
         offer.setTagList(tagService.addTags(tags, offer));
-        offer.setUser(userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName)));
+        offer.setUser(userRepository.findByUsername(userName).orElseThrow(() ->
+                new UsernameNotFoundException("User Not Found with username: " + userName)));
         offer.setDate(new Date());
         offerRepository.save(offer);
         userDetailsService.addOfferToUser(userName, offer);
@@ -235,12 +236,12 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public void addImage(MultipartFile file) {
         Offer offer = new Offer();
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         if (fileName.contains("..")) {
             System.out.println("not a a valid file");
         }
         try {
-            offer.setPhotos(Base64.getEncoder().encodeToString(file.getBytes()));
+            offer.setPhotos(file.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -252,13 +253,13 @@ public class OfferServiceImpl implements OfferService {
         Optional<Offer> offerDB = offerRepository.findById(offerId);
         if (offerDB.isPresent()) {
             Offer offer = offerDB.get();
-            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             TagMapper tagMapper = new TagMapper();
             if (fileName.contains("..")) {
                 System.out.println("not a a valid file");
             }
             try {
-                offer.setPhotos(Base64.getEncoder().encodeToString(file.getBytes()));
+                offer.setPhotos(file.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -313,5 +314,12 @@ public class OfferServiceImpl implements OfferService {
             offer.setTagList(null);
             offerRepository.delete(offer);
         } else throw new IllegalArgumentException("Bad id");
+    }
+
+    @Override
+    public void deleteComment(Long offerId, Long commentId) {
+        Optional<Offer> offer = offerRepository.findById(offerId);
+        offer.ifPresent(value -> value.getComments().removeIf(comment -> Objects.equals(comment.getId(), commentId)));
+        offerRepository.save(offer.get());
     }
 }

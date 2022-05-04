@@ -15,7 +15,7 @@ public class OfferResponseDto {
     private String title;
     private float price;
     private String details;
-    private String photos;
+    private byte[] photos;
     private String userLogin;
     private Date date;
     List<TagResponseDto> tags;
