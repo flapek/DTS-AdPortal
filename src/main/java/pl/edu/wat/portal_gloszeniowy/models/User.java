@@ -1,6 +1,7 @@
 package pl.edu.wat.portal_gloszeniowy.models;
 
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import pl.edu.wat.portal_gloszeniowy.entities.Offer;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.util.Set;
         @UniqueConstraint(columnNames = "email")
     })
 @NoArgsConstructor
+@ToString
 public class User
 {
     @Id
@@ -46,18 +48,18 @@ public class User
     @OneToMany
     private List<Offer> offers;
 
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     public List<Offer> getOffers() {
         return offers;
     }
 
     public void setOffers(List<Offer> offers) {
         this.offers = offers;
-    }
-
-    public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
     }
 
     public Long getId() {

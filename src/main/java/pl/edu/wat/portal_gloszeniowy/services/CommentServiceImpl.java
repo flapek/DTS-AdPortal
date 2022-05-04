@@ -28,7 +28,7 @@ public class CommentServiceImpl implements CommentService{
     @Override
     public List<CommentResponseDto> getOfferComments(Long offerId) {
         return offerService.getOffer(offerId).getComments()
-                .stream().map(comment -> new CommentResponseDto(comment.getId(), comment.getUser(), comment.getContent()))
+                .stream().map(comment -> new CommentResponseDto(comment.getId(), comment.getUsername(), comment.getContent()))
                 .collect(Collectors.toList());
     }
 
@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService{
         Offer offer = offerService.getOffer(commentRequestDto.getOfferId());
         List<Comment> commentList = offer.getComments();
 
-        comment.setUser(commentRequestDto.getUsername());
+        comment.setUsername(commentRequestDto.getUsername());
         comment.setOffer(offer);
         comment.setContent(commentRequestDto.getContent());
         commentRepository.save(comment);

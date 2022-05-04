@@ -1,17 +1,18 @@
 package pl.edu.wat.portal_gloszeniowy.entities;
 
-import lombok.Data;
+import lombok.*;
 import pl.edu.wat.portal_gloszeniowy.models.User;
 
 import javax.persistence.*;
-import java.awt.*;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "offer")
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Offer {
 
     @Id
@@ -22,7 +23,7 @@ public class Offer {
     private String details;
     private Date date;
     @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Column(columnDefinition = "BIGINT")
     private String photos;
 
     @OneToMany

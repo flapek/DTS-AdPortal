@@ -16,7 +16,6 @@ import pl.edu.wat.portal_gloszeniowy.models.User;
 import pl.edu.wat.portal_gloszeniowy.payload.request.LoginRequest;
 import pl.edu.wat.portal_gloszeniowy.payload.request.SignupRequest;
 import pl.edu.wat.portal_gloszeniowy.payload.response.JwtResponse;
-import pl.edu.wat.portal_gloszeniowy.payload.response.MessageResponse;
 import pl.edu.wat.portal_gloszeniowy.repositories.RoleRepository;
 import pl.edu.wat.portal_gloszeniowy.repositories.UserRepository;
 import pl.edu.wat.portal_gloszeniowy.security.jwt.JwtUtils;

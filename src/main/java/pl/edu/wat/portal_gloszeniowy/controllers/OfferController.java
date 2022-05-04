@@ -28,48 +28,6 @@ public class OfferController {
 
     private final OfferService offerService;
 
-
-//    @GetMapping(path = "/offers/{pageNumber}")
-//    public ResponseEntity<OffersWithPagesCountResponseDto> getAllOffers(@PathVariable Integer pageNumber)
-//    {
-//        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getAllOffers(pageNumber), HttpStatus.OK);
-//    }
-//
-//    @GetMapping(path = "/myOffers/{pageNumber}")
-//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-//    public ResponseEntity<OffersWithPagesCountResponseDto> getUserOffers(@PathVariable Integer pageNumber,
-//                                                                         Principal principal)
-//    {
-//        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getUserOffers(principal.getName(), pageNumber), HttpStatus.OK);
-//    }
-
-//    @GetMapping(path = "/filters/")
-//    public ResponseEntity<List<OfferResponseDto>> getAllOfferss()
-//    {
-//        return new ResponseEntity<List<OfferResponseDto>>(offerService.getAllOffers(), HttpStatus.OK);
-//    }
-
-//    @GetMapping(path = "/myFilters/{pageNumber}")
-//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-//    public ResponseEntity<OffersWithPagesCountResponseDto> getUserOfferss(@PathVariable Integer pageNumber,
-//                                                                          Principal principal)
-//    {
-//        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getUserOffers(principal.getName()), HttpStatus.OK);
-//    }
-
-//    @RequestMapping(value="/myFilters/{tags}", method=RequestMethod.GET)
-//    @ResponseBody
-//    public ResponseEntity<OffersWithPagesCountResponseDto> getMyFilteredOffers(@PathVariable String[] tags, Principal principal)
-//    {
-//        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getFilteredOffers(new FilterOptionsRequestDto(tags, null), principal.getName()), HttpStatus.OK);
-//    }
-//
-//    @RequestMapping(value="/filters/{tags}", method=RequestMethod.GET)
-//    @ResponseBody
-//    public ResponseEntity<OffersWithPagesCountResponseDto> getFilteredOffers(@PathVariable String[] tags)
-//    {
-//        return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getFilteredOffers(new FilterOptionsRequestDto(tags, null), ""), HttpStatus.OK);
-//    }
     @PostMapping(value="/filtered_offers")
     public ResponseEntity<OffersWithPagesCountResponseDto> getFilteredOffers(@RequestBody FilterOptionsRequestDto filterOptionsRequestDto)
     {

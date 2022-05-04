@@ -1,19 +1,22 @@
 package pl.edu.wat.portal_gloszeniowy.entities;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "comment")
-@Data
+@NoArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     private String content;
-    private String user;
+    private String username;
 
     @ManyToOne
     private Offer offer;
