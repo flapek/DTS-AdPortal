@@ -1,6 +1,5 @@
 package pl.edu.wat.portal_gloszeniowy.controllers;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,32 +29,27 @@ public class CommentController {
     }
 
     @GetMapping(path = "/offer/{offerId}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getOfferComments(@PathVariable("offerId") Long offerId)
-    {
+    public ResponseEntity<List<CommentResponseDto>> getOfferComments(@PathVariable("offerId") Long offerId) {
         List<CommentResponseDto> comments = commentService.getOfferComments(offerId);
-        if(comments.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (comments.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         else return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
     @PostMapping(path = "/offer/addComment")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity addCommentToOffer(@RequestBody CommentRequestDto commentRequestDto,
-                                            Principal principal)
-    {
-        System.out.println(commentRequestDto.getContent());
-        commentService.addComment(commentRequestDto, principal.getName());
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<List<CommentResponseDto>> addCommentToOffer(@RequestBody CommentRequestDto commentRequestDto,
+                                                                      Principal principal) {
+        return new ResponseEntity<>(commentService.addComment(commentRequestDto, principal.getName()) ,HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/deleteComment/{offerId}/{commentId}")
     public ResponseEntity deleteComment(@PathVariable("commentId") Long commentId,
-                                        @PathVariable("offerId") Long offerId, Principal principal)
-    {
+                                        @PathVariable("offerId") Long offerId, Principal principal) {
         offerService.deleteComment(offerId, commentId);
         commentService.deleteComment(commentId);
 
         List<CommentResponseDto> comments = commentService.getOfferComments(offerId);
-        if(comments.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (comments.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         else return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 }

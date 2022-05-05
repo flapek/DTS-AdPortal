@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public void addComment(CommentRequestDto commentRequestDto, String userName) {
+    public List<CommentResponseDto> addComment(CommentRequestDto commentRequestDto, String userName) {
         Comment comment = new Comment();
         Offer offer = offerService.getOffer(commentRequestDto.getOfferId());
         List<Comment> commentList = offer.getComments();
@@ -45,6 +45,7 @@ public class CommentServiceImpl implements CommentService{
         commentList.add(comment);
         offer.setComments(commentList);
         offerRepository.save(offer);
+        return getOfferComments(offer.getId());
     }
 
     @Override
