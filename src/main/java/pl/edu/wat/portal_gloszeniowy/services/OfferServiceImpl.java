@@ -70,25 +70,6 @@ public class OfferServiceImpl implements OfferService {
             // TODO zmienic na filtrowanie zapytaniem po przejsciu na PostgreSQL
 //            offers = getFilteredOffersSorted(Collections.singleton(tagRepository.findByNameIn(Arrays.asList(filterOptionsRequestDto.getTags()))), filterOptionsRequestDto.getPageNumber(), sortType);
         }
-//        TagMapper tagMapper = new TagMapper();
-//        List<OfferResponseDto> responseDtos = new LinkedList<>();
-//        if(userName=="")
-//            responseDtos= getAllOffers();
-//        else
-//            responseDtos= getUserOffers(userName);
-//        List<OfferResponseDto> matchOffers =responseDtos;
-//        for (OfferResponseDto offerResponse:
-//             responseDtos) {
-//            for (String stringTag:
-//                 filterOptionsRequestDto.getTags()) {
-//                matchOffers.removeIf(t -> !tagMapper.toStringTagList(t.getTags()).contains(stringTag));
-//            }
-//        }
-//
-//        System.out.println(matchOffers);
-//        return matchOffers;
-
-
         return new OffersWithPagesCountResponseDto(offers, offerRepository.count()/PAGES_PER_SITE); // FIXME brana jest zawsze liczba wszystkich ofert
     }
 
@@ -100,7 +81,8 @@ public class OfferServiceImpl implements OfferService {
         if (filterOptionsRequestDto.getTags() == null) {
             offers = getUserOffersSorted(filterOptionsRequestDto.getPageNumber(), sortType, user);
         } else {
-            offers = getUserFilteredOffersSorted(Collections.singleton(tagRepository.findAll()), filterOptionsRequestDto.getPageNumber(), sortType, user);
+            offers = getUserFilteredOffersSorted(filterOptionsRequestDto.getTags(), filterOptionsRequestDto.getPageNumber(), sortType, user);
+//            offers = getUserFilteredOffersSorted(Collections.singleton(tagRepository.findAll()), filterOptionsRequestDto.getPageNumber(), sortType, user);
         }
         return new OffersWithPagesCountResponseDto(offers, offerRepository.count()/PAGES_PER_SITE); // FIXME brana jest zawsze liczba wszystkich ofert
     }
