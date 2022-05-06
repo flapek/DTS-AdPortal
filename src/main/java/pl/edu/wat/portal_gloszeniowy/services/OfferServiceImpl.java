@@ -231,20 +231,36 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void updateOffer(MultipartFile file, String title, float price, String details, List<String> tags, Long offerId) {
+    public void updateOffer(MultipartFile file, String title, float price, String details, List<String> tags, Long offerId, boolean newPhoto) {
         Optional<Offer> offerDB = offerRepository.findById(offerId);
         if (offerDB.isPresent()) {
             Offer offer = offerDB.get();
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-            TagMapper tagMapper = new TagMapper();
-            if (fileName.contains("..")) {
-                System.out.println("not a a valid file");
+            if(newPhoto) {
+                String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+                TagMapper tagMapper = new TagMapper();
+                if (fileName.contains("..")) {
+                    System.out.println("not a a valid file");
+                }
+                try {
+                    offer.setPhotos(file.getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-            try {
-                offer.setPhotos(file.getBytes());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            offer.setTitle(title);
+            offer.setPrice(price);
+            offer.setDetails(details);
+            offer.setTagList(new LinkedList<Tag>());
+            offer.setTagList(tagService.addTags(tags, offer));
+            offerRepository.save(offer);
+        } else throw new IllegalArgumentException("Bad id");
+    }
+
+    @Override
+    public void updateOffer( String title, float price, String details, List<String> tags, Long offerId, boolean newPhoto) {
+        Optional<Offer> offerDB = offerRepository.findById(offerId);
+        if (offerDB.isPresent()) {
+            Offer offer = offerDB.get();
             offer.setTitle(title);
             offer.setPrice(price);
             offer.setDetails(details);

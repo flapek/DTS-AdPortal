@@ -29,7 +29,8 @@ public interface OfferService {
 
     void addOffer(MultipartFile file, String title, float price, String details, List<String> tags, String userName);
 
-    void updateOffer(MultipartFile file, String title, float price, String details, List<String> tags, Long offerId);
+    void updateOffer(MultipartFile file, String title, float price, String details, List<String> tags, Long offerId, boolean newPhoto);
+    void updateOffer(String title, float price, String details, List<String> tags, Long offerId, boolean newPhoto);
 
     void deleteOffer(Long offerId, String userName);
 
