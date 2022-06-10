@@ -93,6 +93,7 @@ public class OfferServiceImpl implements OfferService {
         return offerRepository.findAll(createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
+                        offer.getLat(), offer.getLon(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -103,6 +104,7 @@ public class OfferServiceImpl implements OfferService {
         return offerRepository.findByTagListIn(tags, createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
+                        offer.getLat(), offer.getLon(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -130,6 +132,7 @@ public class OfferServiceImpl implements OfferService {
         return offerRepository.findByUser(user, createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
+                        offer.getLat(), offer.getLon(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -140,6 +143,7 @@ public class OfferServiceImpl implements OfferService {
         return offerRepository.findByUserAndTagListIn(user, tags, createPageable(pageNumber, sortType)).stream()
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
+                        offer.getLat(), offer.getLon(),
                         tagMapper.toTagResponseDtoList(offer.getTagList())))
                 .collect(Collectors.toList());
     }
@@ -174,6 +178,8 @@ public class OfferServiceImpl implements OfferService {
                     offer.getDetails(),
                     offer.getPhotos(),
                     offer.getUser().getUsername(), offer.getDate(),
+                    offer.getLat(),
+                    offer.getLon(),
                     tagMapper.toTagResponseDtoList(offer.getTagList()));
         } else throw new IllegalArgumentException("Bad id");
     }
@@ -208,6 +214,8 @@ public class OfferServiceImpl implements OfferService {
         offer.setTagList(tagService.addTags(tags, offer));
         offer.setUser(userRepository.findByUsername(userName).orElseThrow(() ->
                 new UsernameNotFoundException("User Not Found with username: " + userName)));
+//        offer.setLat(52.227716);
+//        offer.setLon(21.002394);
         offer.setDate(new Date());
         offerRepository.save(offer);
         userDetailsService.addOfferToUser(userName, offer);

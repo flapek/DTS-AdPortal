@@ -23,6 +23,10 @@ public class Offer {
     private float price;
     private String details;
     private Date date;
+    @Column(nullable = true) // FIXME do zmiany po wyczyszczeniu bazy z danych bez tej wartości
+    private double lat;
+    @Column(nullable = true) // FIXME do zmiany po wyczyszczeniu bazy z danych bez tej wartości
+    private double lon;
 
     @Lob
     @Type(type = "org.hibernate.type.ImageType")

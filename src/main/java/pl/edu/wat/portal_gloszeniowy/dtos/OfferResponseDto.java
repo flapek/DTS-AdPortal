@@ -18,6 +18,8 @@ public class OfferResponseDto {
     private byte[] photos;
     private String userLogin;
     private Date date;
+    private double lat;
+    private double lon;
     List<TagResponseDto> tags;
 
 }
