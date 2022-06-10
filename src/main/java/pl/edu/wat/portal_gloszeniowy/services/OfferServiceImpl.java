@@ -94,7 +94,7 @@ public class OfferServiceImpl implements OfferService {
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         offer.getLat(), offer.getLon(),
-                        tagMapper.toTagResponseDtoList(offer.getTagList())))
+                        tagMapper.toTagResponseDtoList(offer.getTagList()), offer.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -105,7 +105,7 @@ public class OfferServiceImpl implements OfferService {
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         offer.getLat(), offer.getLon(),
-                        tagMapper.toTagResponseDtoList(offer.getTagList())))
+                        tagMapper.toTagResponseDtoList(offer.getTagList()), offer.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -133,7 +133,7 @@ public class OfferServiceImpl implements OfferService {
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         offer.getLat(), offer.getLon(),
-                        tagMapper.toTagResponseDtoList(offer.getTagList())))
+                        tagMapper.toTagResponseDtoList(offer.getTagList()), offer.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -144,7 +144,7 @@ public class OfferServiceImpl implements OfferService {
                 .map(offer -> new OfferResponseDto(offer.getId(), offer.getTitle(), offer.getPrice(),
                         offer.getDetails(), offer.getPhotos(), offer.getUser().getUsername(), offer.getDate(),
                         offer.getLat(), offer.getLon(),
-                        tagMapper.toTagResponseDtoList(offer.getTagList())))
+                        tagMapper.toTagResponseDtoList(offer.getTagList()), offer.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -180,7 +180,7 @@ public class OfferServiceImpl implements OfferService {
                     offer.getUser().getUsername(), offer.getDate(),
                     offer.getLat(),
                     offer.getLon(),
-                    tagMapper.toTagResponseDtoList(offer.getTagList()));
+                    tagMapper.toTagResponseDtoList(offer.getTagList()), offer.getStatus());
         } else throw new IllegalArgumentException("Bad id");
     }
 
@@ -217,6 +217,7 @@ public class OfferServiceImpl implements OfferService {
 //        offer.setLat(52.227716);
 //        offer.setLon(21.002394);
         offer.setDate(new Date());
+        offer.setStatus(0);
         offerRepository.save(offer);
         userDetailsService.addOfferToUser(userName, offer);
         tagService.addOfferToTag(offer, offer.getTagList());
@@ -274,6 +275,16 @@ public class OfferServiceImpl implements OfferService {
             offer.setDetails(details);
             offer.setTagList(new LinkedList<Tag>());
             offer.setTagList(tagService.addTags(tags, offer));
+            offerRepository.save(offer);
+        } else throw new IllegalArgumentException("Bad id");
+    }
+
+    @Override
+    public void updateShippingStatus(Long id, int status){
+        Optional<Offer> offerDB = offerRepository.findById(id);
+        if (offerDB.isPresent()) {
+            Offer offer = offerDB.get();
+            offer.setStatus(status);
             offerRepository.save(offer);
         } else throw new IllegalArgumentException("Bad id");
     }

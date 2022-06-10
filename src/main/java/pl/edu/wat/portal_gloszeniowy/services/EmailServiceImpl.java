@@ -14,13 +14,26 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
 
     @Override
-    public void sendEmail(String email) {
+    public void sendEmail(String email, String offerTitle, int s) {
+        String status = "";
+        switch (s){
+            case 0:
+                status = "\"Kompletowanie zamówienia\"";
+                break;
+            case 1:
+                status = "\"Przygotowane do wysyłki\"";
+                break;
+            case 2:
+                status = "\"Wysłano\"";
+                break;
+        }
+
         String title = "";
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper =
                     new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setText("tresc maila");
+            helper.setText("Status oferty " + offerTitle + " został zmieniony na: " + status);
             helper.setTo(email);
             helper.setSubject(title);
             helper.setFrom("aplikacjatreningowa@gmail.com");

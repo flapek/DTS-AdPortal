@@ -1,17 +1,19 @@
 package pl.edu.wat.portal_gloszeniowy.controllers;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pl.edu.wat.portal_gloszeniowy.dtos.FilterOptionsRequestDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.OfferResponseDto;
 import pl.edu.wat.portal_gloszeniowy.dtos.OffersWithPagesCountResponseDto;
+import pl.edu.wat.portal_gloszeniowy.kafka.producers.KafkaProducer;
 import pl.edu.wat.portal_gloszeniowy.services.OfferService;
 
 import java.io.File;
@@ -20,12 +22,26 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
 
-@Controller
-@AllArgsConstructor
+@RestController
 @CrossOrigin(origins = "http://localhost:3000/")
 public class OfferController {
 
     private final OfferService offerService;
+    private final KafkaProducer kafkaProducer;
+    private final ObjectMapper objectMapper;
+    @Autowired
+    public OfferController(OfferService offerService, KafkaProducer kafkaProducer, ObjectMapper objectMapper) {
+        this.offerService = offerService;
+        this.kafkaProducer = kafkaProducer;
+        this.objectMapper = objectMapper;
+    }
+
+    @GetMapping(path = "/offer/{id}")
+    public ResponseEntity<OfferResponseDto> getOffer(@PathVariable("id") Long id)
+    {
+        return new ResponseEntity<>(offerService.getOfferDto(id), HttpStatus.OK);
+    }
+
 
     @PostMapping(value = "/filtered_offers")
     public ResponseEntity<OffersWithPagesCountResponseDto> getFilteredOffers(@RequestBody FilterOptionsRequestDto filterOptionsRequestDto) {
@@ -35,11 +51,6 @@ public class OfferController {
     @PostMapping(value = "/filtered_my_offers")
     public ResponseEntity<OffersWithPagesCountResponseDto> getUserFilteredOffers(@RequestBody FilterOptionsRequestDto filterOptionsRequestDto, Principal principal) {
         return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getUserFilteredOffers(filterOptionsRequestDto, principal.getName()), HttpStatus.OK);
-    }
-
-    @GetMapping(path = "/offer/{id}")
-    public ResponseEntity<OfferResponseDto> getOffer(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(offerService.getOfferDto(id), HttpStatus.OK);
     }
 
     @PostMapping(path = "/addOffer")
@@ -60,6 +71,20 @@ public class OfferController {
         } else
             offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
         return new ResponseEntity(HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/addFile")
+    public ResponseEntity addImage(@RequestParam("file") MultipartFile file)
+    {
+        offerService.addImage(file);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @PostMapping(path = "/bought")
+    public void bought(@RequestBody OfferResponseDto offer) throws JsonProcessingException {
+        String objJackson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(offer);
+        System.out.println(objJackson);
+        kafkaProducer.send("purchasedThings", objJackson);
     }
 
     @PutMapping(path = "/updateOfferWithPhoto")
@@ -89,15 +114,11 @@ public class OfferController {
 
     @DeleteMapping(path = "/delete-offer/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity deleteOffer(@PathVariable("id") Long id, Principal principal) {
+    public ResponseEntity deleteOffer(@PathVariable("id") Long id, Principal principal)
+    {
         offerService.deleteOffer(id, principal.getName());
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @PostMapping(path = "/addFile")
-    public ResponseEntity addImage(@RequestParam("file") MultipartFile file) {
-        offerService.addImage(file);
-        return new ResponseEntity(HttpStatus.OK);
-    }
 
 }

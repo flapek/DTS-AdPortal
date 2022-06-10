@@ -8,7 +8,7 @@ import java.util.List;
 public class OfferRequestDto {
     private String title;
     private float price;
-    private String detais;
+    private String details;
     private String photos;
     List<TagRequestDto> tags;
 }

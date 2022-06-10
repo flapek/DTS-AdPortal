@@ -2,5 +2,5 @@ package pl.edu.wat.portal_gloszeniowy.services;
 
 
 public interface EmailService {
-    void sendEmail(String email);
+    void sendEmail(String email, String content, int status);
 }

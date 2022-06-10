@@ -1,5 +1,6 @@
 package pl.edu.wat.portal_gloszeniowy.dtos;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.util.Date;
@@ -21,5 +22,6 @@ public class OfferResponseDto {
     private double lat;
     private double lon;
     List<TagResponseDto> tags;
-
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private int status;
 }
