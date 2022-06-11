@@ -193,7 +193,7 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public void addOffer(MultipartFile file, String title, float price, String details, List<String> tags, String userName) {
+    public void addOffer(MultipartFile file, String title, float price, String details, List<String> tags, double lat, double lon, String userName) {
         Offer offer = new Offer();
         if (file != null) {
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
@@ -214,8 +214,8 @@ public class OfferServiceImpl implements OfferService {
         offer.setTagList(tagService.addTags(tags, offer));
         offer.setUser(userRepository.findByUsername(userName).orElseThrow(() ->
                 new UsernameNotFoundException("User Not Found with username: " + userName)));
-//        offer.setLat(52.227716);
-//        offer.setLon(21.002394);
+        offer.setLat(lat);
+        offer.setLon(lon);
         offer.setDate(new Date());
         offer.setStatus(0);
         offerRepository.save(offer);

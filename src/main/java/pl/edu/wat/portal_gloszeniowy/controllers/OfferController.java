@@ -42,7 +42,6 @@ public class OfferController {
         return new ResponseEntity<>(offerService.getOfferDto(id), HttpStatus.OK);
     }
 
-
     @PostMapping(value = "/filtered_offers")
     public ResponseEntity<OffersWithPagesCountResponseDto> getFilteredOffers(@RequestBody FilterOptionsRequestDto filterOptionsRequestDto) {
         return new ResponseEntity<OffersWithPagesCountResponseDto>(offerService.getFilteredOffers(filterOptionsRequestDto), HttpStatus.OK);
@@ -60,6 +59,8 @@ public class OfferController {
                                    @RequestParam("price") float price,
                                    @RequestParam("details") String details,
                                    @RequestParam("tags") String[] tags,
+                                   @RequestParam("lat") double lat,
+                                   @RequestParam("lon") double lon,
                                    Principal principal) throws IOException {
         if (multipartFile == null) {
             File file = new File("C:\\Users\\adamm\\IdeaProjects\\portal_gloszeniowy\\src\\main\\" +
@@ -67,9 +68,9 @@ public class OfferController {
             FileInputStream input = new FileInputStream(file);
             MultipartFile mFile = new MockMultipartFile("file",
                     file.getName(), "text/plain", IOUtils.toByteArray(input));
-            offerService.addOffer(mFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
+            offerService.addOffer(mFile, title, price, details, Arrays.asList(tags.clone()), lat, lon, principal.getName());
         } else
-            offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), principal.getName());
+            offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), lat, lon, principal.getName());
         return new ResponseEntity(HttpStatus.CREATED);
     }
 
