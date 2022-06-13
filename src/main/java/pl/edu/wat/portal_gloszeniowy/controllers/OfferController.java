@@ -69,8 +69,12 @@ public class OfferController {
             MultipartFile mFile = new MockMultipartFile("file",
                     file.getName(), "text/plain", IOUtils.toByteArray(input));
             offerService.addOffer(mFile, title, price, details, Arrays.asList(tags.clone()), lat, lon, principal.getName());
-        } else
-            offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), lat, lon, principal.getName());
+        }else{
+            System.out.println(multipartFile + " " + title + " " + price + " " + details + " "
+                    + Arrays.asList(tags.clone()) + " " + lat + " " + lon + " " + principal.getName());
+            offerService.addOffer(multipartFile, title, price, details, Arrays.asList(tags.clone()), lat, lon,
+                    principal.getName());
+        }
         return new ResponseEntity(HttpStatus.CREATED);
     }
 

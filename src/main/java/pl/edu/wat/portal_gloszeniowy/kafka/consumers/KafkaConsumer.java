@@ -43,7 +43,7 @@ public class KafkaConsumer {
         OfferResponseDto offerShipping = objectMapper.readValue(s, OfferResponseDto.class);
         offerService.updateShippingStatus(offerShipping.getId(), offerShipping.getStatus());
         Optional<User> user = userRepository.findByUsername(offerShipping.getUserLogin());
-//        user.ifPresent(value -> emailService.sendEmail(value.getEmail(), offerShipping.getTitle(),
-//                offerShipping.getStatus()));
+        user.ifPresent(value -> emailService.sendEmail(value.getEmail(), offerShipping.getTitle(),
+                offerShipping.getStatus()));
     }
 }
