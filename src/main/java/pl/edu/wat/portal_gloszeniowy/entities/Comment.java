@@ -19,5 +19,6 @@ public class Comment {
     private String username;
 
     @ManyToOne
+    @JoinColumn(name="offer_id")
     private Offer offer;
 }

@@ -6,6 +6,7 @@ import pl.edu.wat.portal_gloszeniowy.models.User;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -34,11 +35,15 @@ public class Offer {
     @Type(type = "org.hibernate.type.ImageType")
     private byte[] photos;
 
-    @OneToMany
-    private List<Comment> comments;
+    @OneToMany(mappedBy="offer")
+    private List<Comment> comments = new LinkedList<>();
 
-    @ManyToMany
-    private List<Tag> tagList;
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            joinColumns = { @JoinColumn(name = "offer_id") },
+            inverseJoinColumns = { @JoinColumn(name = "tag_id") }
+    )
+    private List<Tag> tagList = new LinkedList<>();
 
 
     @ManyToOne

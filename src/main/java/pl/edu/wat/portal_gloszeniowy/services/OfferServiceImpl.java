@@ -315,13 +315,8 @@ public class OfferServiceImpl implements OfferService {
         User user = userRepository.findByUsername(userName).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + userName));
         if (offerDB.isPresent()) {
             Offer offer = offerDB.get();
-            for (Comment comment :
-                    offer.getComments()) {
-                commentRepository.delete(comment);
-            }
-
-            for (Tag tag :
-                    offer.getTagList()) {
+            commentRepository.deleteAll(offer.getComments());
+            for (Tag tag : offer.getTagList()) {
                 tagService.deleteTag(tag);
             }
             List<Offer> oofers = user.getOffers();
