@@ -1,29 +1,40 @@
 <mxfile host="65bd71144e">
-    <diagram id="_H_IIofRGWlCvdBiCWD9" name="Page-1">
-        <mxGraphModel dx="1122" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <diagram id="_H_IIofRGWlCvdBiCWD9" name="Architure">
+        <mxGraphModel dx="1374" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="4" value="Fronend" style="html=1;" vertex="1" parent="1">
+                <mxCell id="4" value="Fronend" style="html=1;" parent="1" vertex="1">
                     <mxGeometry x="300" y="510" width="110" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="8" value="CRUD operations" style="edgeStyle=none;html=1;startArrow=block;startFill=1;" edge="1" parent="1" source="5" target="7">
+                <mxCell id="8" value="CRUD operations" style="edgeStyle=none;html=1;startArrow=block;startFill=1;" parent="1" source="5" target="7" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="9" value="HTTP comunication" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=block;startFill=1;" edge="1" parent="1" source="5" target="6">
+                <mxCell id="9" value="HTTP comunication" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=block;startFill=1;" parent="1" source="5" target="6" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="10" value="HTTP comunication" style="edgeStyle=none;html=1;startArrow=block;startFill=1;" edge="1" parent="1" source="5" target="4">
+                <mxCell id="10" value="HTTP comunication" style="edgeStyle=none;html=1;startArrow=block;startFill=1;" parent="1" source="5" target="4" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="5" value="API" style="html=1;" vertex="1" parent="1">
+                <mxCell id="5" value="API" style="html=1;" parent="1" vertex="1">
                     <mxGeometry x="300" y="340" width="110" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="6" value="Kafka" style="html=1;" vertex="1" parent="1">
+                <mxCell id="6" value="Kafka" style="html=1;" parent="1" vertex="1">
                     <mxGeometry x="580" y="340" width="110" height="50" as="geometry"/>
                 </mxCell>
-                <mxCell id="7" value="DB" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;" vertex="1" parent="1">
+                <mxCell id="7" value="DB" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;" parent="1" vertex="1">
                     <mxGeometry x="325" y="150" width="60" height="80" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="H1LW3L2Of6W0IPjnOn3t" name="UseCase">
+        <mxGraphModel dx="1374" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="sDSZ2P07eNEFt2pxbaVM-0"/>
+                <mxCell id="sDSZ2P07eNEFt2pxbaVM-1" parent="sDSZ2P07eNEFt2pxbaVM-0"/>
+                <mxCell id="sDSZ2P07eNEFt2pxbaVM-2" value="" style="shape=umlLifeline;participant=umlActor;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;spacingTop=36;outlineConnect=0;" vertex="1" parent="sDSZ2P07eNEFt2pxbaVM-1">
+                    <mxGeometry x="60" y="90" width="20" height="300" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
