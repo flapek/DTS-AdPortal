@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AuthService from "./services/auth.service";
@@ -85,18 +85,19 @@ class App extends Component {
         </Navbar>
 
         <div className="container mt-3">
-          <Switch>
-            <Route exact path={["/", "/home"]} component={MainPage} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/register" component={Register} />
-            <Route exact path="/profile" component={Profile} />
-            <Route path="/addAdv" component={BoardUser} />
-            <Route path="/mod" component={BoardModerator} />
-            <Route path="/admin" component={BoardAdmin} />
-            <Route path="/offerDetails" component={OfferDetails}/>
-            <Route path="/myAds" component={MyAds}/>
-            <Route path="/editOffer" component={EditOffer}/>
-          </Switch>
+          <Routes>
+            <Route exact path="/" element={<MainPage />} />
+            <Route exact path="/home" element={<MainPage />} />
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path="/register" element={<Register />} />
+            <Route exact path="/profile" element={<Profile />} />
+            <Route path="/addAdv" element={<BoardUser />} />
+            <Route path="/mod" element={<BoardModerator />} />
+            <Route path="/admin" element={<BoardAdmin />} />
+            <Route path="/offerDetails" element={<OfferDetails />}/>
+            <Route path="/myAds" element={<MyAds />}/>
+            <Route path="/editOffer" element={<EditOffer />}/>
+          </Routes>
         </div>
       </div>
     );
