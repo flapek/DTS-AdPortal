@@ -101,7 +101,7 @@ export default class Register extends Component {
             message: response.data,
             successful: true
           });
-          this.props.history.push("/login", {succesfulRegister: 'true', message: this.state.message});
+          this.props.history.push("/login", {succesfulRegister: 'true', message: response.data});
           window.location.reload();
         },
         error => {

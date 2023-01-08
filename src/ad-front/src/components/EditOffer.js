@@ -116,11 +116,10 @@ const EditOffer = props => {
     return (
         <Container>
             <Form onSubmit={handleSubmit}>
-                <Form.Group>
-                    <Form.File type="file" required name="photos" accept="image/png, image/gif, image/jpeg"
-                               onChange={onChangeHandler}
-                               disabled={disabled}
-                    />
+                <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Add photo</Form.Label>
+                    <Form.Control type="file" name="photos" accept="image/png, image/gif, image/jpeg"
+                                  onChange={onChangeHandler} disabled={disabled} />
                 </Form.Group>
                 <Form.Check controlId="newPhoto">
                     <Form.Check.Input type="checkbox" name='newPhoto' onChange={handleCheckboxChange}

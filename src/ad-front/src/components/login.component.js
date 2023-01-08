@@ -31,12 +31,11 @@ export default class Login extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.location);
-    // if (this.props.location.state!==undefined){
-    //   this.setState({
-    //     afterRegister: true
-    //   })
-    // }
+    if (this.props.location.state!==undefined){
+      this.setState({
+        afterRegister: true
+      })
+    }
   }
 
   onChangeUsername(e) {

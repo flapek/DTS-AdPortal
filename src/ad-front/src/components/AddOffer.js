@@ -86,8 +86,9 @@ const AddOffer = () => {
     return (
         <Container>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <Form.Group>
-                    <Form.File type="file" name="photos" accept="image/png, image/gif, image/jpeg" onChange={onChangeHandler} />
+                <Form.Group controlId="formFile" className="mb-3">
+                    <Form.Label>Add photo</Form.Label>
+                    <Form.Control type="file" name="photos" accept="image/png, image/gif, image/jpeg" onChange={onChangeHandler} />
                 </Form.Group>
                 <Form.Group controlId="offerTitle">
                     <Form.Label>Tytuł</Form.Label>
