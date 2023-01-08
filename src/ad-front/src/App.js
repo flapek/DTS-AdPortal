@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import AuthService from "./services/auth.service";
@@ -13,7 +13,7 @@ import BoardAdmin from "./components/board-admin.component";
 import OfferDetails from "./components/OfferDetails";
 import MyAds from "./components/MyOffers";
 import EditOffer from "./components/EditOffer";
-import {Nav, Navbar} from "react-bootstrap";
+import { Nav, Navbar } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 
 class App extends Component {
@@ -57,47 +57,54 @@ class App extends Component {
               <Nav className="mr-auto">
                 <Nav.Link href="/home">Ogłoszenia</Nav.Link>
                 {showModeratorBoard && (
-                    <Nav.Link href="/mod">Moderator Board</Nav.Link>
-                    )}
+                  <Nav.Link href="/mod">Moderator Board</Nav.Link>
+                )}
                 {showAdminBoard && (
-                    <Nav.Link href="/admin">Admin Board</Nav.Link>
+                  <Nav.Link href="/admin">Admin Board</Nav.Link>
                 )}
                 {currentUser && (
-                    <div>
-                      <Nav.Link href="/addAdv">Dodaj ogłoszenie</Nav.Link>
-                    </div>
+                  <div>
+                    <Nav.Link href="/addAdv">Dodaj ogłoszenie</Nav.Link>
+                  </div>
                 )}
                 {currentUser && (
-                    <Nav.Link href="/myAds">Moje ogłoszenia</Nav.Link>
+                  <Nav.Link href="/myAds">Moje ogłoszenia</Nav.Link>
                 )}
               </Nav>
               <Nav className="ml-auto">
-                {currentUser ? (<div></div>) :(<Nav.Link href="/register">Rejestracja</Nav.Link>)}
+                {currentUser ? (
+                  <div></div>
+                ) : (
+                  <Nav.Link href="/register">Rejestracja</Nav.Link>
+                )}
                 {currentUser && (
-                    <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
+                  <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
                 )}
                 {currentUser ? (
-                    <Nav.Link href="/login" onClick={this.logOut} >Wyloguj się</Nav.Link>
-                ) : (<Nav.Link href="/login">Logowanie</Nav.Link>)}
+                  <Nav.Link href="/login" onClick={this.logOut}>
+                    Wyloguj się
+                  </Nav.Link>
+                ) : (
+                  <Nav.Link href="/login">Logowanie</Nav.Link>
+                )}
               </Nav>
             </Navbar.Collapse>
           </Container>
         </Navbar>
 
         <div className="container mt-3">
-          <Routes>
-            <Route exact path="/" element={<MainPage />} />
-            <Route exact path="/home" element={<MainPage />} />
-            <Route exact path="/login" element={<Login />} />
-            <Route exact path="/register" element={<Register />} />
-            <Route exact path="/profile" element={<Profile />} />
-            <Route path="/addAdv" element={<BoardUser />} />
-            <Route path="/mod" element={<BoardModerator />} />
-            <Route path="/admin" element={<BoardAdmin />} />
-            <Route path="/offerDetails" element={<OfferDetails />}/>
-            <Route path="/myAds" element={<MyAds />}/>
-            <Route path="/editOffer" element={<EditOffer />}/>
-          </Routes>
+          <Switch>
+            <Route exact path={["/", "/home"]} component={MainPage} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/addAdv" component={BoardUser} />
+            <Route path="/mod" component={BoardModerator} />
+            <Route path="/admin" component={BoardAdmin} />
+            <Route path="/offerDetails" component={OfferDetails} />
+            <Route path="/myAds" component={MyAds} />
+            <Route path="/editOffer" component={EditOffer} />
+          </Switch>
         </div>
       </div>
     );

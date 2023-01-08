@@ -4,7 +4,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 import AuthService from "../services/auth.service";
 
-const required = value => {
+const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert">
@@ -26,7 +26,7 @@ export default class Login extends Component {
       password: "",
       loading: false,
       message: "",
-      afterRegister: false
+      afterRegister: false,
     };
   }
 
@@ -41,13 +41,13 @@ export default class Login extends Component {
 
   onChangeUsername(e) {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
@@ -56,7 +56,7 @@ export default class Login extends Component {
 
     this.setState({
       message: "",
-      loading: true
+      loading: true,
     });
 
     this.form.validateAll();
@@ -67,7 +67,7 @@ export default class Login extends Component {
           this.props.history.push("/");
           window.location.reload();
         },
-        error => {
+        (error) => {
           const resMessage =
             (error.response &&
               error.response.data &&
@@ -79,13 +79,13 @@ export default class Login extends Component {
 
           this.setState({
             loading: false,
-            message: "Błędne dane!"
+            message: "Błędne dane!",
           });
         }
       );
     } else {
       this.setState({
-        loading: false
+        loading: false,
       });
     }
   }
@@ -94,16 +94,16 @@ export default class Login extends Component {
     return (
       <div className="col-md-12">
         {this.state.afterRegister && (
-            <div className="form-group">
-              <div className={"alert alert-success"} role="alert">
-                {this.props.location.state.message}
-              </div>
+          <div className="form-group">
+            <div className={"alert alert-success"} role="alert">
+              {this.props.location.state.message}
             </div>
+          </div>
         )}
         <div className="card card-container">
           <Form
             onSubmit={this.handleLogin}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
@@ -137,7 +137,7 @@ export default class Login extends Component {
                 disabled={this.state.loading}
               >
                 {this.state.loading && (
-                  <span className="spinner-border spinner-border-sm"/>
+                  <span className="spinner-border spinner-border-sm" />
                 )}
                 <span>Zaloguj</span>
               </button>
@@ -152,7 +152,7 @@ export default class Login extends Component {
             )}
             <CheckButton
               style={{ display: "none" }}
-              ref={c => {
+              ref={(c) => {
                 this.checkBtn = c;
               }}
             />
