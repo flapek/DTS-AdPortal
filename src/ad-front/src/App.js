@@ -51,11 +51,11 @@ class App extends Component {
       <div>
         <Navbar bg="dark" variant="dark" expand="lg" sticky="top">
           <Container>
-            <Navbar.Brand href="/">Portal ogłoszeniowy</Navbar.Brand>
+            <Navbar.Brand href="/">Announcement portal</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-                <Nav.Link href="/home">Ogłoszenia</Nav.Link>
+                <Nav.Link href="/home">Announcements</Nav.Link>
                 {showModeratorBoard && (
                   <Nav.Link href="/mod">Moderator Board</Nav.Link>
                 )}
@@ -64,28 +64,28 @@ class App extends Component {
                 )}
                 {currentUser && (
                   <div>
-                    <Nav.Link href="/addAdv">Dodaj ogłoszenie</Nav.Link>
+                    <Nav.Link href="/addAdv">Add announcement</Nav.Link>
                   </div>
                 )}
                 {currentUser && (
-                  <Nav.Link href="/myAds">Moje ogłoszenia</Nav.Link>
+                  <Nav.Link href="/myAds">My announcements</Nav.Link>
                 )}
               </Nav>
               <Nav className="ml-auto">
                 {currentUser ? (
                   <div></div>
                 ) : (
-                  <Nav.Link href="/register">Rejestracja</Nav.Link>
+                  <Nav.Link href="/register">Sign up</Nav.Link>
                 )}
                 {currentUser && (
                   <Nav.Link href="/profile">{currentUser.username}</Nav.Link>
                 )}
                 {currentUser ? (
                   <Nav.Link href="/login" onClick={this.logOut}>
-                    Wyloguj się
+                    Log out
                   </Nav.Link>
                 ) : (
-                  <Nav.Link href="/login">Logowanie</Nav.Link>
+                  <Nav.Link href="/login">Sign In</Nav.Link>
                 )}
               </Nav>
             </Navbar.Collapse>

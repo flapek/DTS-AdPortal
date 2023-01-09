@@ -47,12 +47,12 @@ const AddComment = props => {
                     <Row>
                         <Col  md="10">
                             <Card.Text>
-                                <Form.Control type="text" placeholder="Wpisz komentarz" {...register("content",
+                                <Form.Control type="text" placeholder="Write comment here" {...register("content",
                                     {required: true})} value={inputValue} onChange={handleChange}/>
                             </Card.Text>
                         </Col>
                         <Col  md="2">
-                            <Button type="submit" className="btn-primary btn">Dodaj komentarz</Button>
+                            <Button type="submit" className="btn-primary btn">Add comment</Button>
                         </Col>
                     </Row>
                 </Card.Body>

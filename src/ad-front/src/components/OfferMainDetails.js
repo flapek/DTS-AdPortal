@@ -26,17 +26,17 @@ const OfferMainDetails = props => {
                 <Row><Col><Card.Title>{props.offer.title}</Card.Title></Col></Row>
                 <Row>
                     <Col sm={10}><Card.Subtitle>Cena: {props.offer.price} zł</Card.Subtitle></Col>
-                    <Col><Button variant="primary" size="lg" onClick={onClick}>Kup teraz</Button></Col>
+                    <Col><Button variant="primary" size="lg" onClick={onClick}>Buy</Button></Col>
                 </Row>
-                <Row><Col><Card.Subtitle>Tagi:{props.offer.tags.map((tag) => (
+                <Row><Col><Card.Subtitle>Tags: {props.offer.tags.map((tag) => (
                     <span key = {tag.id}> #{tag.name}</span>
                 ))}</Card.Subtitle></Col></Row>
 
-                <Row><Col><Card.Subtitle>Szczegóły oferty</Card.Subtitle></Col></Row>
+                <Row><Col><Card.Subtitle>Announcement details</Card.Subtitle></Col></Row>
                 <Row><Col><Card.Text>{props.offer.details}</Card.Text></Col></Row>
-                {props.offer.status===1 ? <Row><Col><Card.Text>Przygotowane do wysyłki!</Card.Text></Col></Row>
+                {props.offer.status===1 ? <Row><Col><Card.Text>Ready for shipment!</Card.Text></Col></Row>
                     : <div></div>}
-                {props.offer.status===2 ? <Row><Col><Card.Text>Wysłano!</Card.Text></Col></Row>
+                {props.offer.status===2 ? <Row><Col><Card.Text>Sent!</Card.Text></Col></Row>
                     : <div></div>}
                 <MapToView offer={props.offer}/>
             </Card.Body>

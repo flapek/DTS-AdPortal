@@ -124,21 +124,21 @@ const EditOffer = props => {
                 <Form.Check controlId="newPhoto">
                     <Form.Check.Input type="checkbox" name='newPhoto' onChange={handleCheckboxChange}
                                       value={offer.newPhoto}/>
-                    <Form.Check.Label>Zmień zdjęcie</Form.Check.Label>
+                    <Form.Check.Label>Change photo</Form.Check.Label>
                 </Form.Check>
                 <Form.Group controlId="offerTitle">
-                    <Form.Label>Tytuł</Form.Label>
-                    <Form.Control type="text" placeholder="Podaj tytuł" name='title' onChange={handleInputChange}
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text" placeholder="Title" name='title' onChange={handleInputChange}
                                   value={offer.title}/>
                 </Form.Group>
                 <Form.Group controlId="offerPrice">
-                    <Form.Label>Cena w zł</Form.Label>
-                    <Form.Control type="number" placeholder="Podaj cenę" name="price" onChange={handleInputChange}
+                    <Form.Label>Price €</Form.Label>
+                    <Form.Control type="number" placeholder="Price €" name="price" onChange={handleInputChange}
                                   value={offer.price}/>
                 </Form.Group>
                 <Form.Group controlId="offerDetails">
-                    <Form.Label>Opis</Form.Label>
-                    <Form.Control type="text" placeholder="Podaj opis" name="details" onChange={handleInputChange}
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control type="text" placeholder="Description" name="details" onChange={handleInputChange}
                                   value={offer.details}/>
                 </Form.Group>
                 <Form.Group>
@@ -149,8 +149,8 @@ const EditOffer = props => {
                 </Form.Group>
                 <Form.Group>
                     <Row>
-                        <Col xs={2}><Button variant="primary" type="submit">Zaipisz zmiany</Button></Col>
-                        <Col><Button className="btn-danger" onClick={onDelete}>Usuń ofertę</Button></Col>
+                        <Col xs={2}><Button variant="primary" type="submit">Save changes</Button></Col>
+                        <Col><Button className="btn-danger" onClick={onDelete}>Delete announcement</Button></Col>
                     </Row>
                 </Form.Group>
             </Form>

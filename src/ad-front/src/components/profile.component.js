@@ -17,11 +17,11 @@ export default class Profile extends Component {
       <div className="container">
         <header className="jumbotron">
           <h3>
-            <strong>Ustawienia konta</strong>
+            <strong>Account settings</strong>
           </h3>
         </header>
         <p>
-            <strong>Nazwa użytkownika:</strong>{" "}
+            <strong>Username:</strong>{" "}
             {currentUser.username}
         </p>
         <p>

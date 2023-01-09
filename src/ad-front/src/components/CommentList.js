@@ -38,7 +38,7 @@ const CommentList = props => {
       <div>
         {comments.length!==0 ?
             <div>
-              <h4>Komentarze: </h4>
+              <h4>Comments: </h4>
               <Container style={{textAlign: "left"}}>
                 {comments.map((comment) => (
                     <Comment key={comment.id}
@@ -50,7 +50,7 @@ const CommentList = props => {
                     />
                 ))}
               </Container>
-            </div> : <p>Brak komentarzy</p>
+            </div> : <p>No comments</p>
         }
         <Container>
           <div hidden={username===''}>

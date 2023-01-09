@@ -33,17 +33,17 @@ const OfferList = props => {
 
   const getFilters = filters => {
     let sort = '';
-    if (filters.sort === 'Najdroższe') {
+    if (filters.sort === 'Most expensive') {
       sort = 'SORT_BY_PRICE_DESC';
-    } else if (filters.sort === 'Najtańsze') {
+    } else if (filters.sort === 'The cheapest') {
       sort = 'SORT_BY_PRICE_ASC';
-    } else if (filters.sort === 'Alfabetycznie A-Z') {
+    } else if (filters.sort === 'Alphabetical A-Z') {
       sort = 'SORT_BY_TITLE_ASC';
-    } else if (filters.sort === 'Alfabetycznie Z-A') {
+    } else if (filters.sort === 'Alphabetical Z-A') {
       sort = 'SORT_BY_TITLE_DESC';
-    } else if (filters.sort === 'Najnowsze') {
+    } else if (filters.sort === 'Latest') {
       sort = 'SORT_BY_DATE_DESC';
-    } else if (filters.sort === 'Najstarsze') {
+    } else if (filters.sort === 'The oldest') {
       sort = 'SORT_BY_DATE_ASC';
     } else {
       sort = 'SORT_BY_DATE_DESC';

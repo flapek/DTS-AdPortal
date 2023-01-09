@@ -85,7 +85,7 @@ const MyOffers = props => {
   return (
       <div className="container">
         <header className="jumbotron">
-          <h3>Moje ogłoszenia</h3>
+          <h3>My announcements</h3>
         </header>
 
         <Filter getFilters={getFilters}/>

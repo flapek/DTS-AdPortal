@@ -60,7 +60,7 @@ const Filter = props => {
 
     return(
         <Row>
-            <Col md="auto">Wbierz tagi
+            <Col md="auto">Choose tags
                 <Multiselect
                 isObject={false}
                 hidePlaceholder={true}
@@ -70,21 +70,21 @@ const Filter = props => {
                 selectedValues={choosenTags}
                 />
             </Col>
-            <Col md="auto">Wybierz sortowanie
+            <Col md="auto">Sort
                 <Form.Control as="select"  ref={myRef} value={chosenSort} onChange={handleSortChange}>
-                    <option>Najnowsze</option>
-                    <option>Najstarsze</option>
-                    <option>Najtańsze</option>
-                    <option>Najdroższe</option>
-                    <option>Alfabetycznie A-Z</option>
-                    <option>Alfabetycznie Z-A</option>
+                    <option>Latest</option>
+                    <option>The oldest</option>
+                    <option>The cheapest</option>
+                    <option>Most expensive</option>
+                    <option>Alphabetical A-Z</option>
+                    <option>Alphabetical Z-A</option>
                 </Form.Control>
             </Col>
             <Col md="auto"> <p></p>
-                <Button className="btn-primary" onClick={onButtonClick}>Filtruj</Button>
+                <Button className="btn-primary" onClick={onButtonClick}>Filter</Button>
             </Col>
             <Col md="auto"> <p></p>
-                <Button className="btn-secondary" onClick={onClearFilters}>Usuń filtry</Button>
+                <Button className="btn-secondary" onClick={onClearFilters}>Delete filters</Button>
             </Col>
         </Row>
     )

@@ -91,19 +91,19 @@ const AddOffer = () => {
                     <Form.Control type="file" name="photos" accept="image/png, image/gif, image/jpeg" onChange={onChangeHandler} />
                 </Form.Group>
                 <Form.Group controlId="offerTitle">
-                    <Form.Label>Tytuł</Form.Label>
-                    <Form.Control type="text" placeholder="Podaj tytuł" {...register("title", { required: true })}/>
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control type="text" placeholder="Title" {...register("title", { required: true })}/>
                 </Form.Group>
                 <Form.Group controlId="offerPrice">
-                    <Form.Label>Cena w zł</Form.Label>
-                    <Form.Control type="number" placeholder="Podaj cenę" name="price"  {...register("price", { required: true })}/>
+                    <Form.Label>Price €</Form.Label>
+                    <Form.Control type="number" placeholder="Price" name="price"  {...register("price", { required: true })}/>
                 </Form.Group>
                 <Form.Group controlId="offerDetails">
-                    <Form.Label>Opis</Form.Label>
-                    <Form.Control type="text" placeholder="Podaj opis" name="details"  {...register("details", { required: true })}/>
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control type="text" placeholder="Description" name="details"  {...register("details", { required: true })}/>
                 </Form.Group>
                 <Form.Group>
-                <Form.Label>Tagi</Form.Label>
+                <Form.Label>Tags</Form.Label>
                     <Tags
                         addTag={addTag}
                     />
@@ -114,7 +114,7 @@ const AddOffer = () => {
                     />
                 </Form.Group>
                 <Button variant="primary" type="submit" style={{marginBottom: 10}} size="lg">
-                    Dodaj ofertę
+                    Add
                 </Button>
             </Form>     
             </Container>

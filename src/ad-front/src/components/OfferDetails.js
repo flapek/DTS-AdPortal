@@ -33,7 +33,7 @@ const OfferDetails = props => {
     return (
       <Container>
         <OfferMainDetails offer={offer}/>
-          {offer.id!=null ? <CommentList offer={offer}/> : <p>Ładowanie komentarzy...</p>}
+          {offer.id!=null ? <CommentList offer={offer}/> : <p>Loading comments...</p>}
       </Container>
     )
 }
