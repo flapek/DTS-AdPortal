@@ -15,7 +15,7 @@ function Offer (props) {
               </Col>
               <Col>
                   <strong>{props.offer.price}</strong>
-                  <small>  zł</small>
+                  <small>  €</small>
               </Col>
             </Card.Title>
             <Card.Text>
@@ -30,7 +30,7 @@ function Offer (props) {
                 offer: props.offer,
               },
             }}>
-              Zobacz szczegóły
+              Details
             </Link>
             <p></p>
             <Link className="btn btn-secondary" hidden={props.offer.userLogin!==props.currentUser} to={{
@@ -39,7 +39,7 @@ function Offer (props) {
                 offer: props.offer,
               },
             }}>
-              Edytuj
+              Edit
                 </Link>
         </Card.Body>
       </Card>
